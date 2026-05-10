@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liceo Vicente Palacios Valdés - Oficial</title>
+    
+    <!-- Librerías Externas -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        :root {
+            --azul-marino: #002E5D;
+            --azul-profundo: #001D3A;
+            --azul-luz: #0B6EA8;
+            --gris-oscuro: #1A1A1A;
+            --gris-patrimonial: #C9CED6;
+            --gris-claro: #F5F5F5;
+            --verde-esperanza: #00A8B5;
+            --verde-profundo: #007C89;
+            --verde-suave: #E3F8FA;
+            --blanco-calido: #FBFCFE;
+            --azul-niebla: #E8F1FA;
+            --azul-hielo: #F1F7FC;
+            --gris-azulado: #EEF2F6;
+            --patrimonial-suave: #F2F4F8;
+        }
+
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(180deg, var(--blanco-calido) 0%, var(--gris-claro) 42%, #ffffff 100%);
+            color: var(--azul-marino);
+            overflow-x: hidden;
+        }
+
+        /* Utilidades Personalizadas */
+        .bg-azul-lvpv { background-color: var(--azul-marino); }
+        .bg-azul-profundo { background-color: var(--azul-profundo); }
+        .text-azul-lvpv { color: var(--azul-marino); }
+        .border-azul-lvpv { border-color: var(--azul-marino); }
+        .bg-verde-lvpv { background-color: var(--verde-esperanza); }
+        .bg-azul-niebla { background-color: var(--azul-niebla); }
+        .bg-verde-suave { background-color: var(--verde-suave); }
+        .bg-azul-hielo { background-color: var(--azul-hielo); }
+        .bg-gris-azulado { background-color: var(--gris-azulado); }
+        .text-verde-lvpv, .text-verde-esperanza { color: var(--verde-esperanza); }
+        .text-verde-profundo { color: var(--verde-profundo); }
+        .border-verde-esperanza { border-color: var(--verde-esperanza); }
+        .hover\:bg-verde-esperanza:hover { background-color: var(--verde-esperanza); }
+        
+        .bg-gradient-lvpv { 
+            background: linear-gradient(135deg, var(--azul-profundo) 0%, var(--azul-marino) 44%, var(--verde-profundo) 145%);
+            background-size: 180% 180%;
+            animation: gradientShift 12s ease-in-out infinite;
+        }
+
+        #scroll-progress {
+            position: fixed; top: 0; left: 0; height: 4px; width: 0; z-index: 9999;
+            background: linear-gradient(90deg, var(--verde-esperanza), var(--gris-patrimonial), var(--azul-luz));
+            box-shadow: 0 0 16px rgba(0, 168, 181, 0.55);
+            transition: width 0.12s ease-out;
+        }
+
+        .site-header {
+            background: rgba(0, 46, 93, 0.96);
+            backdrop-filter: blur(18px);
+            transition: all 0.3s ease;
+        }
+
+        .site-header.scrolled {
+            background: rgba(0, 29, 58, 0.92);
+            box-shadow: 0 14px 40px rgba(0, 29, 58, 0.22);
+        }
+
+        .nav-link {
+            position: relative;
+            transition: all 0.3s;
+        }
+        .nav-link::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0;
+            background: linear-gradient(90deg, var(--verde-esperanza), var(--gris-patrimonial));
+            transition: width 0.3s;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        .hero-gradient {
+            background: linear-gradient(90deg, rgba(0, 29, 58, 0.95) 0%, rgba(0, 46, 93, 0.72) 48%, rgba(26, 26, 26, 0.28) 100%),
+                        linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0, 29, 58, 0.86) 100%);
+        }
+
+        .hero-stat {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255,255,255,0.16);
+            border-radius: 0.5rem;
+            position: relative;
+        }
+        .hero-stat::before {
+            content: ''; position: absolute; inset: 0 0 auto 0; height: 3px;
+            background: linear-gradient(90deg, var(--verde-esperanza), var(--gris-patrimonial));
+        }
+
+        /* Animaciones Nuevas */
+        @keyframes zoomLoop {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+        .animate-zoom-loop {
+            animation: zoomLoop 24s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        .animate-floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .card-hover {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -5px rgba(0, 46, 93, 0.15), 0 10px 20px -5px rgba(0, 46, 93, 0.1);
+        }
+
+        /* Animaciones */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .reveal-left { opacity: 0; transform: translateX(-40px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .reveal-right { opacity: 0; transform: translateX(40px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .active { opacity: 1; transform: translate(0, 0); }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .text-dinamico {
+            background: linear-gradient(90deg, var(--verde-esperanza) 0%, #00e5ff 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            transition: all 0.5s ease-in-out;
+            filter: drop-shadow(0 4px 12px rgba(0, 168, 181, 0.4));
+        }
+
+        .value-badge {
+            background: white; border-left: 4px solid var(--azul-marino); padding: 0.75rem 1.25rem;
+            border-radius: 0.5rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: all 0.25s ease;
+        }
+        .value-badge:hover { transform: translateX(8px); border-left-color: var(--verde-esperanza); }
+
+        .filter-btn.active {
+            background: var(--azul-marino); color: white;
+        }
+
+        .taller-card.hidden-card { display: none; }
+
+        /* Chat */
+        .chat-window {
+            display: none; flex-direction: column; transform-origin: bottom right;
+        }
+        .chat-window.active { display: flex; animation: chatPop 0.4s ease-out; }
+        @keyframes chatPop {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div id="scroll-progress"></div>
+
+    <!-- Header -->
+    <header class="site-header text-white sticky top-0 z-50 border-b border-white/10">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/Dise%C3%B1o%20sin%20t%C3%ADtulo.png" alt="Insignia LVPV" class="w-12 h-auto">
+                <div>
+                    <h1 class="text-xl font-black tracking-tight leading-none uppercase">Liceo Vicente</h1>
+                    <h1 class="text-xl font-black tracking-tight leading-none text-gray-400 uppercase">Palacios Valdés</h1>
+                </div>
+            </div>
+            
+            <nav class="hidden lg:flex space-x-8 text-xs uppercase tracking-widest font-bold">
+                <a href="#inicio" class="nav-link">Inicio</a>
+                <a href="#nosotros" class="nav-link">Nosotros</a>
+                <a href="#convivencia" class="nav-link">Convivencia</a>
+                <a href="#admision" class="nav-link text-verde-lvpv">Admisión</a>
+                <a href="#vida" class="nav-link">Talleres</a>
+                <a href="#contacto" class="nav-link">Contacto</a>
+            </nav>
+
+            <button class="lg:hidden p-2" id="mobile-menu-btn"><i data-lucide="menu"></i></button>
+        </div>
+        <div id="mobile-nav" class="hidden lg:hidden flex-col bg-azul-lvpv p-6 space-y-4 text-center text-xs font-bold uppercase border-t border-white/10">
+            <a href="#inicio">Inicio</a>
+            <a href="#nosotros">Nosotros</a>
+            <a href="#convivencia">Convivencia</a>
+            <a href="#admision">Admisión</a>
+            <a href="#vida">Talleres</a>
+            <a href="#contacto">Contacto</a>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section id="inicio" class="relative min-h-[85vh] py-20 lg:py-0 flex items-center overflow-hidden bg-azul-lvpv">
+        <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/FACHADA%20HOY.jpg" alt="Fachada LVPV" class="absolute inset-0 w-full h-full object-cover opacity-60 animate-zoom-loop">
+        <div class="absolute inset-0 hero-gradient"></div>
+        <div class="relative container mx-auto px-6 flex flex-col lg:flex-row items-center justify-between gap-12">
+            <div class="max-w-3xl lg:w-1/2 z-10">
+                <span class="reveal inline-block bg-white/10 backdrop-blur-md text-white text-[10px] font-black px-4 py-2 rounded-full mb-6 uppercase tracking-[0.2em] border border-white/20">Est. 1905</span>
+                <h2 class="reveal-left text-5xl md:text-7xl font-black text-white mb-6 leading-tight uppercase">
+                    121 años formando <br> 
+                    <span class="text-dinamico" id="palabra-cambiante">CIUDADANOS</span>
+                </h2>
+                <p class="reveal-left text-lg md:text-xl text-gray-200 mb-10 font-light leading-relaxed max-w-2xl">
+                    Tradición y Excelencia Académica en el corazón de Tomé. Potenciamos los sueños de cada estudiante.
+                </p>
+                <div class="reveal flex flex-wrap gap-4">
+                    <a href="#admision" class="bg-gradient-lvpv text-white px-8 py-4 rounded-lg font-bold uppercase text-sm tracking-widest shadow-xl flex items-center gap-2 hover:scale-105 transition">
+                        <i data-lucide="send" size="18"></i> Postula 2026
+                    </a>
+                    <a href="#nosotros" class="bg-white/10 border-2 border-white/30 text-white px-8 py-4 rounded-lg font-bold uppercase text-sm tracking-widest flex items-center gap-2 hover:bg-white hover:text-azul-lvpv transition">
+                        <i data-lucide="landmark" size="18"></i> Historia
+                    </a>
+                </div>
+                
+                <!-- Redes Sociales en el Hero -->
+                <div class="reveal flex gap-4 mt-6">
+                    <a href="https://www.facebook.com/lvpvtome" target="_blank" rel="noopener noreferrer" class="p-3 bg-white/10 rounded-full text-white hover:bg-verde-esperanza hover:scale-110 transition shadow-sm border border-white/20" aria-label="Facebook LVPV">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                    </a>
+                    <a href="https://www.instagram.com/lvptome/" target="_blank" rel="noopener noreferrer" class="p-3 bg-white/10 rounded-full text-white hover:bg-verde-esperanza hover:scale-110 transition shadow-sm border border-white/20" aria-label="Instagram LVPV">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
+                    </a>
+                    <a href="https://www.youtube.com/@VicentePalaciosVald%C3%A9s" target="_blank" rel="noopener noreferrer" class="p-3 bg-white/10 rounded-full text-white hover:bg-verde-esperanza hover:scale-110 transition shadow-sm border border-white/20" aria-label="YouTube LVPV">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.17C2.5 7.17 2.5 5 4.67 5c1.78 0 7.33 0 7.33 0s5.56 0 7.33 0c2.17 0 2.17 2.17 2.17 2.17s0 2.42 0 4.83c0 2.42 0 4.83 0 4.83s0 2.17-2.17 2.17c-1.78 0-7.33 0-7.33 0s-5.56 0-7.33 0c-2.17 0-2.17-2.17-2.17-2.17s0-2.42 0-4.83c0-2.42 0-4.83 0-4.83z"></path><polygon points="9.75 15.02 15.5 11.5 9.75 7.98 9.75 15.02"></polygon></svg>
+                    </a>
+                </div>
+
+                <div class="reveal grid grid-cols-2 md:grid-cols-3 gap-4 mt-8 max-w-2xl">
+                    <div class="hero-stat p-4 card-hover hover:bg-white/20 transition-colors cursor-default">
+                        <p class="text-3xl font-black text-white counter" data-target="121">0</p>
+                        <p class="text-[10px] uppercase tracking-widest text-gray-300 font-bold">Años</p>
+                    </div>
+                    <div class="hero-stat p-4 card-hover hover:bg-white/20 transition-colors cursor-default">
+                        <p class="text-3xl font-black text-white counter" data-target="1905">0</p>
+                        <p class="text-[10px] uppercase tracking-widest text-gray-300 font-bold">Fundación</p>
+                    </div>
+                    <div class="hero-stat p-4 card-hover hover:bg-white/20 transition-colors cursor-default">
+                        <p class="text-3xl font-black text-white counter" data-target="3">0</p>
+                        <p class="text-[10px] uppercase tracking-widest text-gray-300 font-bold">Áreas JEC</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Imagen del Escudo (Nueva estructura) -->
+            <div class="hidden lg:flex lg:w-1/2 justify-center lg:justify-end reveal-right delay-500 z-10">
+                <div class="animate-floating w-full max-w-[550px] xl:max-w-[650px]">
+                    <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/ESCUDO%20ALUMNOS%203.png" alt="Escudo Alumnos LVPV" class="w-full h-auto object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sellos Educativos -->
+    <section class="py-20 bg-gray-50 border-y border-gray-100">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="reveal text-3xl font-black text-azul-lvpv uppercase">Sellos Educativos</h2>
+                <div class="w-20 h-1 bg-gradient-lvpv mx-auto mt-4"></div>
+            </div>
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="reveal p-8 bg-azul-niebla rounded-2xl shadow-lg text-center border-t-4 border-azul-marino card-hover cursor-default">
+                    <i data-lucide="graduation-cap" class="mx-auto mb-4 text-azul-lvpv" size="40"></i>
+                    <h3 class="font-bold mb-3 uppercase text-sm text-azul-marino">Excelencia</h3>
+                    <p class="text-xs text-gray-700">Fomento del pensamiento crítico y orientación superior.</p>
+                </div>
+                <div class="reveal p-8 bg-gris-azulado rounded-2xl shadow-lg text-center border-t-4 border-gray-400 card-hover cursor-default">
+                    <i data-lucide="heart" class="mx-auto mb-4 text-gray-600" size="40"></i>
+                    <h3 class="font-bold mb-3 uppercase text-sm text-gray-800">Convivencia</h3>
+                    <p class="text-xs text-gray-700">Basada en el respeto mutuo e inclusión total.</p>
+                </div>
+                <div class="reveal p-8 bg-azul-hielo rounded-2xl shadow-lg text-center border-t-4 border-azul-luz card-hover cursor-default">
+                    <i data-lucide="award" class="mx-auto mb-4 text-azul-luz" size="40"></i>
+                    <h3 class="font-bold mb-3 uppercase text-sm text-azul-luz">Mérito</h3>
+                    <p class="text-xs text-gray-700">Valoramos el esfuerzo y la trayectoria escolar.</p>
+                </div>
+                <div class="reveal p-8 bg-verde-suave rounded-2xl shadow-lg text-center border-t-4 border-verde-esperanza card-hover cursor-default">
+                    <i data-lucide="leaf" class="mx-auto mb-4 text-verde-esperanza" size="40"></i>
+                    <h3 class="font-bold mb-3 uppercase text-sm text-verde-profundo">Patrimonio</h3>
+                    <p class="text-xs text-gray-700">Conciencia medioambiental y respeto por la historia.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nosotros -->
+    <section id="nosotros" class="py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="reveal-left">
+                    <span class="font-bold uppercase tracking-[0.2em] text-xs text-azul-lvpv">Nuestra Historia</span>
+                    <h2 class="text-4xl font-black text-azul-lvpv mt-4 mb-6 uppercase">Legado y Proyección</h2>
+                    
+                    <div class="flex flex-col sm:flex-row gap-6 mb-8 bg-azul-niebla p-6 rounded-2xl border-l-4 border-azul-marino shadow-sm card-hover">
+                        <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/e713f559-cbf8-42c5-a51b-dccf179f0d2c.png" alt="Vicente Palacios Valdés" class="w-28 sm:w-32 h-auto rounded-xl shadow-md object-cover flex-shrink-0 border border-gray-200">
+                        <p class="text-gray-700 leading-relaxed text-sm">
+                            El Liceo Vicente Palacios Valdés fue fundado el 2 de junio de 1905 como Liceo de Hombres de Tomé. Con más de 120 años de trayectoria, ha sido parte fundamental de la historia educativa de la comuna, formando generaciones de estudiantes y aportando al desarrollo social, cultural y profesional de Tomé. Hoy seguimos proyectando nuestro legado hacia el futuro, como un liceo científico-humanista orientado a la educación superior y a la formación integral de nuestros estudiantes.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-azul-niebla p-6 rounded-xl border-l-4 border-azul-marino card-hover">
+                            <h4 class="font-black text-xs uppercase mb-2 text-azul-marino">Misión</h4>
+                            <p class="text-[11px] text-gray-600">Calidad académica y pensamiento crítico para el futuro.</p>
+                        </div>
+                        <div class="bg-verde-suave p-6 rounded-xl border-l-4 border-verde-profundo card-hover">
+                            <h4 class="font-black text-xs uppercase mb-2 text-verde-profundo">Visión</h4>
+                            <p class="text-[11px] text-gray-600">Ser un referente cultural y social abierto a la comunidad.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="reveal-right relative">
+                    <div id="history-slider" class="relative w-full h-[450px] rounded-2xl shadow-2xl overflow-hidden bg-azul-marino">
+                        <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/590188353_1953544821857224_8671421861905935699_n.jpg" alt="Historia LVPV 1" class="slide absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-100">
+                        <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/Captura%20de%20pantalla%202026-05-09%20204848.png" alt="Historia LVPV 2" class="slide absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0">
+                        <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/Captura%20de%20pantalla%202026-05-09%20204648.png" alt="Historia LVPV 3" class="slide absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0">
+                        <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/Captura%20de%20pantalla%202026-05-09%20204632.png" alt="Historia LVPV 4" class="slide absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0">
+                        <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/592143791_1956336801578026_1785171658643216140_n.jpg" alt="Historia LVPV 5" class="slide absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0">
+                    </div>
+                    <div class="absolute -bottom-6 -right-6 bg-gradient-lvpv text-white p-8 rounded-2xl shadow-xl hidden lg:block z-10">
+                        <p class="text-4xl font-black text-verde-esperanza">121</p>
+                        <p class="text-[10px] uppercase font-bold tracking-widest">Años de Historia</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Convivencia -->
+    <section id="convivencia" class="py-24 bg-azul-niebla">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row gap-16">
+                <div class="md:w-1/3">
+                    <h2 class="reveal-left text-3xl font-black text-azul-lvpv mb-8 uppercase">Valores Institucionales</h2>
+                    <div class="grid gap-3">
+                        <div class="reveal-left value-badge"><i data-lucide="shield-check"></i> Responsabilidad</div>
+                        <div class="reveal-left value-badge"><i data-lucide="shield-check"></i> Perseverancia</div>
+                        <div class="reveal-left value-badge"><i data-lucide="shield-check"></i> Solidaridad</div>
+                        <div class="reveal-left value-badge"><i data-lucide="shield-check"></i> Respeto</div>
+                        <div class="reveal-left value-badge"><i data-lucide="shield-check"></i> Honestidad</div>
+                        <div class="reveal-left value-badge"><i data-lucide="shield-check"></i> Empatía</div>
+                        <div class="reveal-left value-badge"><i data-lucide="shield-check"></i> Inclusión</div>
+                    </div>
+                </div>
+                <div class="md:w-2/3 grid md:grid-cols-2 gap-8">
+                    <div class="reveal-right bg-gradient-lvpv text-white p-10 rounded-2xl shadow-lg flex flex-col justify-between">
+                        <div>
+                            <i data-lucide="clock" class="mb-6 opacity-50" size="40"></i>
+                            <h4 class="text-xl font-bold mb-4 uppercase">Asistencia y Puntualidad</h4>
+                            <p class="text-sm opacity-80 leading-relaxed">La presencia diaria y el respeto por los horarios son los pilares de nuestra excelencia académica. Formamos hoy la responsabilidad que mañana abrirá las puertas de la Educación Superior y el mundo laboral.</p>
+                        </div>
+                    </div>
+                    <div class="reveal-right bg-white p-10 rounded-2xl shadow-lg border border-gray-100 flex flex-col justify-between">
+                        <div>
+                            <i data-lucide="info" class="mb-6 text-azul-lvpv" size="40"></i>
+                            <h4 class="text-xl font-bold text-azul-lvpv mb-4 uppercase">Aula Segura y Convivencia</h4>
+                            <p class="text-sm text-gray-600 leading-relaxed">Garantizamos un entorno de respeto y protección. Aplicamos nuestro Reglamento Interno con total transparencia y justicia, asegurando que el liceo sea siempre un espacio seguro para el aprendizaje y el crecimiento integral.</p>
+                        </div>
+                        <a href="https://drive.google.com/file/d/1nFRYwT7GUHCgZulgJSP48oitT-7TnbS1/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="mt-6 text-xs font-black uppercase underline text-azul-lvpv hover:text-verde-esperanza transition-colors">Ver Reglamento</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admisión -->
+    <section id="admision" class="py-24 relative overflow-hidden text-white bg-azul-profundo">
+        <!-- Video de Fondo -->
+        <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none opacity-60">
+            <source src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/CORPORATIVO.webm" type="video/webm">
+        </video>
+        <!-- Capa Translúcida -->
+        <div class="absolute inset-0 bg-azul-profundo/70 z-0 pointer-events-none"></div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-4xl mx-auto bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden flex flex-col md:flex-row shadow-2xl">
+                <div class="md:w-1/2 p-12 bg-gradient-lvpv">
+                    <h2 class="text-4xl font-black mb-8 uppercase italic">Postula al LVPV</h2>
+                    <ul class="space-y-6">
+                        <li class="flex items-center gap-4"><i data-lucide="check-circle" class="text-verde-esperanza"></i> Programa PIE de calidad</li>
+                        <li class="flex items-center gap-4"><i data-lucide="check-circle" class="text-verde-esperanza"></i> Preparación PAES intensiva</li>
+                        <li class="flex items-center gap-4"><i data-lucide="check-circle" class="text-verde-esperanza"></i> Formación Científico-Humanista</li>
+                    </ul>
+                </div>
+                <div class="md:w-1/2 p-12 bg-white text-azul-lvpv">
+                    <h3 class="text-2xl font-black mb-6 uppercase">Admisión 2026</h3>
+                    <div class="space-y-4 mb-8">
+                        <div class="p-4 bg-verde-suave rounded-xl border-l-4 border-verde-esperanza font-bold text-verde-profundo card-hover">01. Infórmate en SAE</div>
+                        <div class="p-4 bg-azul-niebla rounded-xl border-l-4 border-azul-lvpv font-bold text-azul-marino card-hover">02. Selecciona nuestro liceo</div>
+                    </div>
+                    <button class="w-full bg-azul-lvpv text-white py-4 rounded-xl font-black uppercase tracking-widest hover:opacity-90 transition shadow-lg">Solicitar Información</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Talleres -->
+    <section id="vida" class="py-24 bg-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="reveal text-3xl font-black text-azul-lvpv uppercase mb-4">Talleres Extraescolares JEC</h2>
+            <div class="flex flex-wrap justify-center gap-3 mb-12">
+                <button class="filter-btn active px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest border border-azul-marino transition" data-filter="all">Todos</button>
+                <button class="filter-btn px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest border border-azul-marino transition" data-filter="deporte">Deportes</button>
+                <button class="filter-btn px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest border border-azul-marino transition" data-filter="arte">Artes</button>
+                <button class="filter-btn px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest border border-azul-marino transition" data-filter="ciencia">Ciencias y Humanidades</button>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8" id="talleres-grid">
+                <div class="taller-card bg-azul-niebla p-8 rounded-2xl border-t-4 border-azul-marino card-hover cursor-default" data-category="deporte">
+                    <i data-lucide="trophy" class="mx-auto mb-4 text-azul-lvpv"></i>
+                    <h4 class="font-bold uppercase text-sm mb-4 text-azul-marino">Deportes</h4>
+                    <p class="text-xs text-gray-700 leading-relaxed">Acondicionamiento Físico, Baile entretenido, Deportes sin barreras, Fútbol mixto, Handball, Volleyball, Yoga y Pilates.</p>
+                </div>
+                <div class="taller-card bg-verde-suave p-8 rounded-2xl border-t-4 border-verde-esperanza card-hover cursor-default" data-category="arte">
+                    <i data-lucide="palette" class="mx-auto mb-4 text-verde-esperanza"></i>
+                    <h4 class="font-bold uppercase text-sm mb-4 text-verde-profundo">Artes</h4>
+                    <p class="text-xs text-gray-700 leading-relaxed">Agrupación musical, Amigurumis, Aprendiendo Guitarra (Principiante e Intermedio), Cine con luz pensamiento y acción, La Música en la Historia, Malabarismo de Circo, Muralismo, Técnicas pictóricas, Xilografía.</p>
+                </div>
+                <div class="taller-card bg-azul-hielo p-8 rounded-2xl border-t-4 border-azul-luz card-hover cursor-default" data-category="ciencia">
+                    <i data-lucide="microscope" class="mx-auto mb-4 text-azul-luz"></i>
+                    <h4 class="font-bold uppercase text-sm mb-4 text-azul-luz">Ciencias y Humanidades</h4>
+                    <p class="text-xs text-gray-700 leading-relaxed">Ajedrez, Aprendiendo Inglés con canciones y películas, Biobío Oculto rescatando leyendas, Comité científico, Cultura Geek, Electricidad domiciliaria, Libros y películas, Patrimonio Histórico Comunal, Periodismo Digital & Multimedia, Preparación PAES (Biología y Química), Taller Ecológico.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / Sección de Contacto (Actualizada a Fondo Oscuro) -->
+    <footer id="contacto" class="bg-azul-profundo text-white pt-24 pb-12 overflow-hidden border-t border-white/5">
+        <div class="container mx-auto px-6 grid md:grid-cols-4 gap-16">
+            <!-- Columna 1: Identidad -->
+            <div class="col-span-1 md:col-span-2 reveal-left">
+                <div class="flex items-center space-x-4 mb-8">
+                    <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/Dise%C3%B1o%20sin%20t%C3%ADtulo.png" alt="Logo LVPV" class="w-16">
+                    <div>
+                        <h3 class="text-2xl font-black leading-none uppercase">Liceo Vicente</h3>
+                        <h3 class="text-2xl font-black leading-none text-gray-400 uppercase">Palacios Valdés</h3>
+                    </div>
+                </div>
+                <p class="text-gray-400 max-w-sm mb-10 leading-relaxed italic text-sm">
+                    "Construyendo el futuro a partir de nuestra historia". 121 años formando personas y potenciando sueños en la comuna de Tomé.
+                </p>
+                <div class="flex space-x-4">
+                    <a href="https://www.facebook.com/lvpvtome" target="_blank" rel="noopener noreferrer" class="p-4 bg-white/5 rounded-full hover:bg-verde-esperanza hover:text-white transition shadow-sm border border-white/10 group">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                    </a>
+                    <a href="https://www.instagram.com/lvptome/" target="_blank" rel="noopener noreferrer" class="p-4 bg-white/5 rounded-full hover:bg-verde-esperanza hover:text-white transition shadow-sm border border-white/10 group">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
+                    </a>
+                    <a href="https://www.youtube.com/@VicentePalaciosVald%C3%A9s" target="_blank" rel="noopener noreferrer" class="p-4 bg-white/5 rounded-full hover:bg-verde-esperanza hover:text-white transition shadow-sm border border-white/10 group">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.17C2.5 7.17 2.5 5 4.67 5c1.78 0 7.33 0 7.33 0s5.56 0 7.33 0c2.17 0 2.17 2.17 2.17 2.17s0 2.42 0 4.83c0 2.42 0 4.83 0 4.83s0 2.17-2.17 2.17c-1.78 0-7.33 0-7.33 0s-5.56 0-7.33 0c-2.17 0-2.17-2.17-2.17-2.17s0-2.42 0-4.83c0-2.42 0-4.83 0-4.83z"></path><polygon points="9.75 15.02 15.5 11.5 9.75 7.98 9.75 15.02"></polygon></svg>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Columna 2: Info de Contacto -->
+            <div class="reveal-left delay-200">
+                <h4 class="font-black uppercase tracking-widest text-xs text-verde-esperanza mb-8">Ubicación y Contacto</h4>
+                <ul class="space-y-6 text-sm text-gray-300">
+                    <li class="flex items-start gap-4">
+                        <i data-lucide="map-pin" class="text-verde-esperanza shrink-0" size="20"></i> 
+                        <span>Mariano Egaña 1525, <br> Tomé, Región del Biobío</span>
+                    </li>
+                    <li class="flex items-center gap-4">
+                        <i data-lucide="phone" class="text-verde-esperanza shrink-0" size="20"></i> 
+                        <span>+56 9 5159 3655</span>
+                    </li>
+                    <li class="flex items-center gap-4">
+                        <i data-lucide="mail" class="text-verde-esperanza shrink-0" size="20"></i> 
+                        <span>contacto@lvpv.cl</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Columna 3: Información Institucional -->
+            <div class="reveal-left delay-400">
+                <h4 class="font-black uppercase tracking-widest text-xs text-verde-esperanza mb-8">Institucional</h4>
+                <ul class="space-y-3 text-xs text-gray-500 font-medium">
+                    <li>RBD: 4829-1</li>
+                    <li>Sostenedor: DEM Tomé</li>
+                    <li>Educación Científico-Humanista</li>
+                    <li class="pt-8 opacity-60">© 2026 Liceo LVPV. <br> Todos los derechos reservados.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Línea final -->
+        <div class="container mx-auto px-6 mt-16 pt-8 border-t border-white/5 text-center">
+            <p class="text-[10px] uppercase tracking-[0.3em] font-bold text-gray-600">Excelencia · Tradición · Comunidad</p>
+        </div>
+    </footer>
+
+    <!-- Chat Asistente -->
+    <div class="fixed bottom-6 right-6 z-[100] flex flex-col items-end">
+        <div id="chat-window" class="chat-window w-[340px] h-[480px] bg-white rounded-3xl mb-4 shadow-2xl border border-gray-200 overflow-hidden">
+            <div class="bg-gradient-lvpv p-6 text-white flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="bot"></i>
+                    <span class="font-black text-xs uppercase">Gemini LVPV</span>
+                </div>
+                <button id="close-chat"><i data-lucide="x" size="20"></i></button>
+            </div>
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 text-sm bg-gray-50">
+                <div class="bg-white p-3 rounded-2xl rounded-tl-none border border-gray-100 shadow-sm">¡Hola! Soy tu asistente LVPV. ¿Quieres saber sobre admisión o talleres?</div>
+            </div>
+            <div class="p-4 bg-white border-t flex gap-2">
+                <input type="text" id="chat-input" placeholder="Pregunta algo..." class="flex-1 bg-gray-100 px-4 py-2 rounded-xl text-sm outline-none">
+                <button id="send-chat" class="bg-azul-lvpv text-white p-2 rounded-xl"><i data-lucide="send" size="18"></i></button>
+            </div>
+        </div>
+        <button id="toggle-chat" class="bg-gradient-lvpv text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all border-2 border-white/20">
+            <i data-lucide="sparkles" size="28"></i>
+        </button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+
+            // Header y Scroll
+            const progress = document.getElementById('scroll-progress');
+            const header = document.querySelector('.site-header');
+            window.addEventListener('scroll', () => {
+                const total = document.documentElement.scrollHeight - window.innerHeight;
+                progress.style.width = (window.scrollY / total * 100) + '%';
+                header.classList.toggle('scrolled', window.scrollY > 40);
+            });
+
+            // Animaciones
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => obs.observe(el));
+
+            // Palabra Dinámica
+            const palabras = ["CIUDADANOS", "LÍDERES", "PERSONAS", "SUEÑOS"];
+            let pIdx = 0;
+            const pEl = document.getElementById('palabra-cambiante');
+            setInterval(() => {
+                pIdx = (pIdx + 1) % palabras.length;
+                pEl.style.opacity = 0;
+                setTimeout(() => { pEl.textContent = palabras[pIdx]; pEl.style.opacity = 1; }, 500);
+            }, 3000);
+
+            // Contadores
+            document.querySelectorAll('.counter').forEach(c => {
+                const target = +c.dataset.target;
+                const obsCounter = new IntersectionObserver(entries => {
+                    if(entries[0].isIntersecting) {
+                        let count = 0;
+                        const tick = () => {
+                            count += target / 40;
+                            if(count < target) { c.innerText = Math.floor(count); requestAnimationFrame(tick); }
+                            else { c.innerText = target; }
+                        };
+                        tick();
+                        obsCounter.unobserve(c);
+                    }
+                });
+                obsCounter.observe(c);
+            });
+
+            // Filtro de Talleres
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const cards = document.querySelectorAll('.taller-card');
+            filterBtns.forEach(btn => {
+                btn.onclick = () => {
+                    const filter = btn.dataset.filter;
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    cards.forEach(card => {
+                        const show = filter === 'all' || card.dataset.category === filter;
+                        card.classList.toggle('hidden-card', !show);
+                    });
+                };
+            });
+
+            // Menú Móvil
+            const mBtn = document.getElementById('mobile-menu-btn');
+            const mNav = document.getElementById('mobile-nav');
+            mBtn.onclick = () => mNav.classList.toggle('hidden');
+
+            // Slider Historia
+            const slides = document.querySelectorAll('#history-slider .slide');
+            let currentSlide = 0;
+            if (slides.length > 0) {
+                setInterval(() => {
+                    slides[currentSlide].classList.remove('opacity-100');
+                    slides[currentSlide].classList.add('opacity-0');
+                    
+                    currentSlide = (currentSlide + 1) % slides.length;
+                    
+                    slides[currentSlide].classList.remove('opacity-0');
+                    slides[currentSlide].classList.add('opacity-100');
+                }, 4000); // Cambia cada 4 segundos
+            }
+
+            // Chat
+            const cWin = document.getElementById('chat-window');
+            const cToggle = document.getElementById('toggle-chat');
+            const cInput = document.getElementById('chat-input');
+            const cMsgs = document.getElementById('chat-messages');
+            
+            cToggle.onclick = () => cWin.classList.toggle('active');
+            document.getElementById('close-chat').onclick = () => cWin.classList.remove('active');
+
+            const botReply = (txt) => {
+                const msg = txt.toLowerCase();
+                if(msg.includes('admision')) return "La admisión 2026 es vía SAE. ¡Te esperamos!";
+                if(msg.includes('taller')) return "Tenemos talleres de deporte, arte y ciencia. ¿Cuál te interesa?";
+                return "Para más información, escríbenos a contacto@lvpv.cl.";
+            };
+
+            const sendMsg = () => {
+                const val = cInput.value.trim();
+                if(!val) return;
+                const uMsg = document.createElement('div');
+                uMsg.className = "bg-azul-lvpv text-white p-3 rounded-2xl rounded-tr-none ml-auto max-w-[85%]";
+                uMsg.innerText = val;
+                cMsgs.appendChild(uMsg);
+                cInput.value = '';
+                
+                setTimeout(() => {
+                    const bMsg = document.createElement('div');
+                    bMsg.className = "bg-white p-3 rounded-2xl rounded-tl-none border border-gray-100 shadow-sm max-w-[85%]";
+                    bMsg.innerText = botReply(val);
+                    cMsgs.appendChild(bMsg);
+                    cMsgs.scrollTop = cMsgs.scrollHeight;
+                }, 600);
+            };
+            document.getElementById('send-chat').onclick = sendMsg;
+            cInput.onkeypress = (e) => e.key === 'Enter' && sendMsg();
+        });
+    </script>
+</body>
+</html>
