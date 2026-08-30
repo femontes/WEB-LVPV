@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liceo Vicente Palacios Valdés - Oficial</title>
+    
+    <!-- Favicon Oficial -->
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/Dise%C3%B1o%20sin%20t%C3%ADtulo.png">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/Dise%C3%B1o%20sin%20t%C3%ADtulo.png">
+    
+    <!-- Librerías Externas -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        :root {
+            --azul-marino: #002E5D;
+            --azul-profundo: #001D3A;
+            --azul-luz: #0B6EA8;
+            --verde-esperanza: #00A8B5;
+            --verde-profundo: #007C89;
+            --cyan-electrico: #00E5FF;
+            --verde-suave: #F0FAFB;
+            --azul-niebla: #F1F6FB;
+            --gris-fondo: #F8FAFC;
+        }
+
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--gris-fondo);
+            color: #1E293B;
+            overflow-x: hidden;
+        }
+
+        /* Utilidades de Marca */
+        .bg-azul-lvpv { background-color: var(--azul-marino); }
+        .bg-azul-profundo { background-color: var(--azul-profundo); }
+        .text-azul-lvpv { color: var(--azul-marino); }
+        .text-verde-lvpv { color: var(--verde-esperanza); }
+        .border-verde-lvpv { border-color: var(--verde-esperanza); }
+        
+        .bg-gradient-lvpv { 
+            background: linear-gradient(135deg, var(--azul-profundo) 0%, var(--azul-marino) 50%, var(--verde-profundo) 100%);
+        }
+
+        /* Barra de Progreso de Lectura */
+        #scroll-progress {
+            position: fixed; top: 0; left: 0; height: 4px; width: 0; z-index: 9999;
+            background: linear-gradient(90deg, var(--verde-esperanza), var(--cyan-electrico), var(--azul-luz));
+            box-shadow: 0 0 14px rgba(0, 229, 255, 0.7);
+            transition: width 0.1s ease-out;
+        }
+
+        /* Header con Glassmorphism */
+        .site-header {
+            background: rgba(0, 46, 93, 0.95);
+            backdrop-filter: blur(18px);
+            transition: all 0.3s ease;
+        }
+        .site-header.scrolled {
+            background: rgba(0, 29, 58, 0.98);
+            box-shadow: 0 10px 30px rgba(0, 29, 58, 0.25);
+            padding-top: 0.7rem;
+            padding-bottom: 0.7rem;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: ''; position: absolute; width: 0; height: 2.5px; bottom: -4px; left: 0;
+            background: var(--verde-esperanza);
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        /* Gradientes del Hero */
+        .hero-overlay {
+            background: linear-gradient(90deg, rgba(0, 29, 58, 0.82) 0%, rgba(0, 46, 93, 0.62) 50%, rgba(0, 29, 58, 0.45) 100%),
+                        linear-gradient(180deg, rgba(0, 29, 58, 0.25) 0%, rgba(0, 29, 58, 0.78) 100%);
+        }
+
+        /* Animaciones */
+        @keyframes zoomLoop {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+        }
+        .animate-zoom-loop {
+            animation: zoomLoop 22s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        @keyframes floatMajestic {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-14px) scale(1.015); }
+        }
+        .animate-floating {
+            animation: floatMajestic 5.5s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        /* Scroll Reveal */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal-left { opacity: 0; transform: translateX(-35px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal-right { opacity: 0; transform: translateX(35px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+        .active { opacity: 1; transform: translate(0, 0); }
+
+        /* Tarjetas con Hover Suave */
+        .card-custom {
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .card-custom:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 35px -5px rgba(0, 46, 93, 0.12), 0 8px 16px -6px rgba(0, 168, 181, 0.08);
+        }
+
+        /* ESTILO DE LA PALABRA CAMBIANTE */
+        .text-dinamico {
+            color: #00E5FF;
+            font-weight: 900;
+            letter-spacing: -0.015em;
+            text-transform: uppercase;
+            display: inline-block;
+            transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            text-shadow: 0 0 30px rgba(0, 229, 255, 0.55), 
+                         0 4px 16px rgba(0, 0, 0, 0.6);
+        }
+
+        /* BOTÓN DESTACADO ORIENTADOR IA */
+        .btn-orientador-cta {
+            background: linear-gradient(135deg, var(--azul-profundo) 0%, var(--azul-marino) 50%, var(--verde-profundo) 100%);
+            color: #FFFFFF;
+            border: 2px solid var(--cyan-electrico);
+            box-shadow: 0 8px 24px -4px rgba(0, 46, 93, 0.35), 0 0 20px rgba(0, 229, 255, 0.3);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .btn-orientador-cta:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 14px 30px -4px rgba(0, 46, 93, 0.45), 0 0 30px rgba(0, 229, 255, 0.55);
+            border-color: #FFFFFF;
+        }
+
+        /* Insignias de Valores */
+        .value-badge {
+            background: white; border-left: 4px solid var(--azul-marino);
+            padding: 0.9rem 1.25rem; border-radius: 0.75rem; font-weight: 700;
+            display: flex; align-items: center; gap: 0.75rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: all 0.25s ease;
+        }
+        .value-badge:hover {
+            transform: translateX(8px);
+            border-left-color: var(--verde-esperanza);
+            box-shadow: 0 4px 14px rgba(0, 168, 181, 0.15);
+        }
+
+        /* Botón Shimmer */
+        .btn-shine {
+            position: relative; overflow: hidden;
+        }
+        .btn-shine::after {
+            content: ''; position: absolute; top: -50%; left: -60%; width: 40%; height: 200%;
+            background: linear-gradient(60deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: rotate(25deg);
+            transition: all 0.7s ease;
+        }
+        .btn-shine:hover::after { left: 130%; }
+
+        .filter-btn.active {
+            background-color: var(--azul-marino);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 46, 93, 0.2);
+        }
+        .taller-card.hidden-card { display: none; }
+
+        /* Chat Flotante */
+        .chat-window {
+            display: none; flex-direction: column; transform-origin: bottom right;
+        }
+        .chat-window.active { display: flex; animation: chatPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        @keyframes chatPop {
+            from { opacity: 0; transform: translateY(20px) scale(0.94); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Botón Circular Flotante del Asistente LVPV */
+        .btn-chat-bubble {
+            background-color: var(--azul-profundo);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3), 0 10px 25px -3px rgba(0, 29, 58, 0.5);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .btn-chat-bubble:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 0 4px rgba(0, 229, 255, 0.7), 0 14px 30px rgba(0, 229, 255, 0.4);
+        }
+
+        .typing-indicator { display: flex; gap: 4px; padding: 6px 10px; align-items: center; }
+        .typing-indicator span { width: 6px; height: 6px; background-color: var(--verde-esperanza); border-radius: 50%; animation: typingDots 1.4s infinite ease-in-out both; }
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typingDots { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+    </style>
+</head>
+<body class="antialiased">
+    <div id="scroll-progress"></div>
+
+    <!-- Header -->
+    <header class="site-header text-white sticky top-0 z-50 border-b border-white/10 py-3">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <a href="#inicio" class="flex items-center space-x-3.5 group">
+                <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/Dise%C3%B1o%20sin%20t%C3%ADtulo.png" alt="Insignia LVPV" class="w-12 h-12 object-contain group-hover:scale-105 transition-transform">
+                <div>
+                    <h1 class="text-lg md:text-xl font-extrabold tracking-tight leading-none uppercase">Liceo Vicente</h1>
+                    <h1 class="text-lg md:text-xl font-extrabold tracking-tight leading-none text-gray-300 uppercase">Palacios Valdés</h1>
+                </div>
+            </a>
+            
+            <!-- Navegación Escritorio -->
+            <div class="hidden lg:flex items-center space-x-6 text-xs uppercase tracking-wider font-bold">
+                <nav class="flex space-x-6">
+                    <a href="#inicio" class="nav-link">Inicio</a>
+                    <a href="#nosotros" class="nav-link">Nosotros</a>
+                    <a href="#convivencia" class="nav-link">Convivencia</a>
+                    <a href="#admision" class="nav-link text-verde-lvpv">Admisión</a>
+                    <a href="#vida" class="nav-link">Talleres</a>
+                    <a href="#equipo" class="nav-link">Directivos</a>
+                    <!-- Nombre actualizado de la pestaña -->
+                    <a href="#docentes" class="nav-link text-cyan-300 font-extrabold">Docentes y Funcionarios</a>
+                    <a href="#contacto" class="nav-link">Contacto</a>
+                </nav>
+
+                <!-- Accesos Directos con Iconos PNG en el Header -->
+                <div class="flex items-center space-x-3.5 pl-4 border-l border-white/20">
+                    <a href="https://www.instagram.com/lvptome" target="_blank" rel="noopener noreferrer" class="transition-transform hover:scale-125" title="Instagram @lvptome" aria-label="Instagram">
+                        <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/icons8-instagram-24.png" alt="Instagram" class="w-5 h-5 object-contain">
+                    </a>
+                    <a href="https://www.facebook.com/lvpvtome" target="_blank" rel="noopener noreferrer" class="transition-transform hover:scale-125" title="Facebook @lvpvtome" aria-label="Facebook">
+                        <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/icons8-facebook-24.png" alt="Facebook" class="w-5 h-5 object-contain">
+                    </a>
+                    <a href="https://www.youtube.com/@VicentePalaciosVald%C3%A9s" target="_blank" rel="noopener noreferrer" class="transition-transform hover:scale-125" title="Canal de YouTube" aria-label="YouTube">
+                        <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/icons8-youtube-24.png" alt="YouTube" class="w-5 h-5 object-contain">
+                    </a>
+                </div>
+            </div>
+
+            <button class="lg:hidden p-2 text-white hover:text-verde-esperanza transition-colors" id="mobile-menu-btn" aria-label="Abrir Menú">
+                <i data-lucide="menu" size="26"></i>
+            </button>
+        </div>
+        
+        <!-- Menú Móvil -->
+        <div id="mobile-nav" class="hidden lg:hidden flex-col bg-azul-profundo p-6 space-y-4 text-center text-sm font-bold uppercase border-t border-white/10">
+            <a href="#inicio" class="block py-2 hover:text-verde-esperanza transition">Inicio</a>
+            <a href="#nosotros" class="block py-2 hover:text-verde-esperanza transition">Nosotros</a>
+            <a href="#convivencia" class="block py-2 hover:text-verde-esperanza transition">Convivencia</a>
+            <a href="#admision" class="block py-2 text-verde-esperanza">Admisión</a>
+            <a href="#vida" class="block py-2 hover:text-verde-esperanza transition">Talleres</a>
+            <a href="#equipo" class="block py-2 hover:text-verde-esperanza transition">Equipo Directivo</a>
+            <!-- Nombre actualizado en Móvil -->
+            <a href="#docentes" class="block py-2 text-cyan-300 font-extrabold">Docentes y Funcionarios</a>
+            <a href="#contacto" class="block py-2 hover:text-verde-esperanza transition">Contacto</a>
+            
+            <!-- Redes en Móvil con Iconos PNG -->
+            <div class="pt-4 border-t border-white/10 flex justify-center space-x-6">
+                <a href="https://www.instagram.com/lvptome" target="_blank" rel="noopener noreferrer" class="p-2.5 bg-white/10 rounded-xl hover:bg-white/20 transition hover:scale-110" aria-label="Instagram">
+                    <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/icons8-instagram-24.png" alt="Instagram" class="w-6 h-6 object-contain">
+                </a>
+                <a href="https://www.facebook.com/lvpvtome" target="_blank" rel="noopener noreferrer" class="p-2.5 bg-white/10 rounded-xl hover:bg-white/20 transition hover:scale-110" aria-label="Facebook">
+                    <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/icons8-facebook-24.png" alt="Facebook" class="w-6 h-6 object-contain">
+                </a>
+                <a href="https://www.youtube.com/@VicentePalaciosVald%C3%A9s" target="_blank" rel="noopener noreferrer" class="p-2.5 bg-white/10 rounded-xl hover:bg-white/20 transition hover:scale-110" aria-label="YouTube">
+                    <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/icons8-youtube-24.png" alt="YouTube" class="w-6 h-6 object-contain">
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section con Edificio Visible -->
+    <section id="inicio" class="relative min-h-[92vh] py-16 lg:py-0 flex items-center overflow-hidden bg-azul-profundo text-white">
+        <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/FACHADA%20HOY.jpg" alt="Fachada LVPV" class="absolute inset-0 w-full h-full object-cover opacity-80 animate-zoom-loop pointer-events-none">
+        <div class="absolute inset-0 hero-overlay pointer-events-none"></div>
+
+        <div class="relative container mx-auto px-6 flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-12 z-10">
+            
+            <!-- Columna de Texto -->
+            <div class="w-full lg:w-1/2 text-center lg:text-left">
+                <div class="reveal inline-flex items-center gap-2 bg-white/15 backdrop-blur-md px-4 py-2 rounded-full mb-6 border border-white/25 shadow-md">
+                    <span class="w-2.5 h-2.5 rounded-full bg-verde-esperanza animate-pulse"></span>
+                    <span class="text-xs md:text-sm font-bold uppercase tracking-widest text-gray-100">121 Años de Excelencia y Futuro</span>
+                </div>
+                
+                <h2 class="reveal-left text-4xl sm:text-5xl lg:text-6xl font-black mb-6 leading-tight uppercase tracking-tight text-white drop-shadow-md">
+                    121 años formando <br class="hidden sm:inline"> 
+                    <span class="text-dinamico" id="palabra-cambiante">CIUDADANOS</span>
+                </h2>
+                
+                <p class="reveal-left text-base sm:text-lg md:text-xl text-gray-100 mb-8 font-normal leading-relaxed max-w-2xl mx-auto lg:mx-0 drop-shadow">
+                    Formando futuro desde el corazón de Tomé. Un Liceo Científico-Humanista con historia, vocación y compromiso, dedicado a potenciar los sueños de cada estudiante.
+                </p>
+                
+                <!-- Tarjetas Estadísticas del Hero -->
+                <div class="reveal grid grid-cols-3 gap-3 md:gap-4 max-w-lg mx-auto lg:mx-0">
+                    <div class="bg-azul-profundo/60 backdrop-blur-md border border-white/25 p-3.5 sm:p-4 rounded-2xl text-center card-custom shadow-lg">
+                        <p class="text-2xl sm:text-3xl font-black text-white">121</p>
+                        <p class="text-xs uppercase tracking-wider text-gray-200 font-bold mt-1">Años</p>
+                    </div>
+                    <div class="bg-azul-profundo/60 backdrop-blur-md border border-white/25 p-3.5 sm:p-4 rounded-2xl text-center card-custom shadow-lg">
+                        <p class="text-2xl sm:text-3xl font-black text-white">1905</p>
+                        <p class="text-xs uppercase tracking-wider text-gray-200 font-bold mt-1">Fundación</p>
+                    </div>
+                    <div class="bg-azul-profundo/60 backdrop-blur-md border border-white/25 p-3.5 sm:p-4 rounded-2xl text-center card-custom shadow-lg">
+                        <p class="text-2xl sm:text-3xl font-black text-white">3</p>
+                        <p class="text-xs uppercase tracking-wider text-gray-200 font-bold mt-1">Áreas JEC</p>
+                    </div>
+                </div>
+
+                <!-- Síguenos en Redes Sociales -->
+                <div class="reveal mt-7 flex flex-wrap items-center justify-center lg:justify-start gap-3.5">
+                    <span class="text-xs md:text-sm uppercase font-extrabold tracking-wider text-gray-200 flex items-center gap-2 drop-shadow">
+                        <span class="w-2 h-2 rounded-full bg-[#00E5FF] animate-ping"></span>
+                        Síguenos en nuestras redes:
+                    </span>
+                    <div class="flex items-center space-x-2.5">
+                        <a href="https://www.instagram.com/lvptome" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-azul-profundo/70 backdrop-blur-md border border-white/30 hover:bg-white/30 flex items-center justify-center transition-all transform hover:-translate-y-1 hover:scale-110 shadow-lg" title="Instagram @lvptome" aria-label="Instagram">
+                            <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/icons8-instagram-24.png" alt="Instagram" class="w-5 h-5 object-contain">
+                        </a>
+                        <a href="https://www.facebook.com/lvpvtome" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-azul-profundo/70 backdrop-blur-md border border-white/30 hover:bg-white/30 flex items-center justify-center transition-all transform hover:-translate-y-1 hover:scale-110 shadow-lg" title="Facebook @lvpvtome" aria-label="Facebook">
+                            <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/icons8-facebook-24.png" alt="Facebook" class="w-5 h-5 object-contain">
+                        </a>
+                        <a href="https://www.youtube.com/@VicentePalaciosVald%C3%A9s" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-azul-profundo/70 backdrop-blur-md border border-white/30 hover:bg-white/30 flex items-center justify-center transition-all transform hover:-translate-y-1 hover:scale-110 shadow-lg" title="Canal de YouTube" aria-label="YouTube">
+                            <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/icons8-youtube-24.png" alt="YouTube" class="w-5 h-5 object-contain">
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Columna de la Imagen: ESCUDO + ALUMNOS (Enlace a Conocer más en https://lvpv.cl/admision/) -->
+            <div class="w-full lg:w-1/2 flex flex-col justify-center items-center reveal-right mt-2 lg:mt-0">
+                <div class="relative w-full max-w-[440px] sm:max-w-[500px] lg:max-w-[580px] xl:max-w-[620px] flex flex-col items-center group">
+                    <div class="absolute -inset-6 bg-gradient-to-tr from-cyan-500/25 via-teal-400/20 to-blue-600/25 rounded-full blur-3xl opacity-80 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+                    
+                    <!-- ENLACE DIRECTO A https://lvpv.cl/admision/ -->
+                    <a href="https://lvpv.cl/admision/" 
+                       target="_blank" 
+                       rel="noopener noreferrer" 
+                       class="animate-floating w-full relative flex flex-col items-center cursor-pointer group"
+                       title="Clic para conocer más sobre el Liceo Vicente Palacios Valdés">
+                        <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/ESCUDO%20ALUMNOS.png" 
+                             alt="Admisión y Estudiantes del Liceo Vicente Palacios Valdés - Conocer más" 
+                             class="relative w-full h-auto object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.65)] group-hover:scale-[1.02] transition-transform duration-500">
+                        
+                        <!-- BOTÓN CONOCER MÁS POSICIONADO DIRECTAMENTE BAJO LA PUNTA DEL ESCUDO -->
+                        <div class="absolute bottom-[6%] sm:bottom-[9%] md:bottom-[11%] left-1/2 -translate-x-1/2 z-20 btn-shine bg-azul-profundo/95 backdrop-blur-md border-[1.5px] border-[#00E5FF] text-white px-4 py-1.5 sm:px-5 sm:py-2 rounded-full text-[11px] sm:text-xs font-extrabold uppercase tracking-wider flex items-center gap-1.5 sm:gap-2 shadow-[0_6px_20px_rgba(0,229,255,0.45)] group-hover:scale-110 group-hover:border-white group-hover:bg-azul-marino transition-all whitespace-nowrap">
+                            <i data-lucide="info" size="14" class="text-[#00E5FF]"></i>
+                            <span>Conocer más</span>
+                            <i data-lucide="arrow-up-right" size="13" class="text-[#00E5FF]"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Sellos Educativos -->
+    <section class="py-20 bg-white border-b border-slate-200">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-14">
+                <h2 class="reveal text-3xl md:text-4xl font-black text-azul-lvpv uppercase tracking-tight">Sellos Educativos</h2>
+                <div class="w-20 h-1 bg-gradient-lvpv mx-auto mt-4 rounded-full"></div>
+            </div>
+            
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="reveal p-7 bg-slate-50 rounded-2xl border-t-4 border-azul-marino card-custom">
+                    <i data-lucide="graduation-cap" class="text-azul-lvpv mb-4" size="36"></i>
+                    <h3 class="font-extrabold mb-2 uppercase text-base text-azul-marino">Excelencia</h3>
+                    <p class="text-base text-slate-600 leading-relaxed">Fomento del pensamiento crítico y orientación constante a la educación superior.</p>
+                </div>
+                <div class="reveal p-7 bg-slate-50 rounded-2xl border-t-4 border-slate-500 card-custom">
+                    <i data-lucide="heart-handshake" class="text-slate-600 mb-4" size="36"></i>
+                    <h3 class="font-extrabold mb-2 uppercase text-base text-slate-800">Convivencia</h3>
+                    <p class="text-base text-slate-600 leading-relaxed">Comunidad basada en el respeto mutuo, el diálogo formativo y la inclusión total.</p>
+                </div>
+                <div class="reveal p-7 bg-slate-50 rounded-2xl border-t-4 border-sky-600 card-custom">
+                    <i data-lucide="award" class="text-sky-600 mb-4" size="36"></i>
+                    <h3 class="font-extrabold mb-2 uppercase text-base text-sky-800">Mérito</h3>
+                    <p class="text-base text-slate-600 leading-relaxed">Reconocimiento al esfuerzo individual y la constancia en la trayectoria escolar.</p>
+                </div>
+                <div class="reveal p-7 bg-slate-50 rounded-2xl border-t-4 border-teal-600 card-custom">
+                    <i data-lucide="leaf" class="text-teal-600 mb-4" size="36"></i>
+                    <h3 class="font-extrabold mb-2 uppercase text-base text-teal-800">Patrimonio</h3>
+                    <p class="text-base text-slate-600 leading-relaxed">Conciencia ambiental activa y profundo respeto por la historia comunal.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nosotros (Con Imagen de Vicente Palacios según la Referencia de Diseño) -->
+    <section id="nosotros" class="py-20 bg-slate-50">
+        <div class="container mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                <div class="reveal-left">
+                    <span class="font-bold uppercase tracking-widest text-xs text-azul-lvpv bg-blue-100/70 px-3 py-1.5 rounded-md">Nuestra Historia</span>
+                    <h2 class="text-3xl md:text-4xl font-black text-azul-lvpv mt-3 mb-6 uppercase tracking-tight">Legado y Proyección</h2>
+                    
+                    <div class="flex flex-col sm:flex-row gap-6 mb-8 bg-white p-6 sm:p-7 rounded-2xl border border-slate-200/80 shadow-sm card-custom items-center sm:items-start">
+                        
+                        <!-- Contenedor Estilo Fotografía en Capas -->
+                        <div class="relative w-32 sm:w-36 flex-shrink-0 my-2 cursor-pointer group select-none" 
+                             onclick="openImageModal('https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/e713f559-cbf8-42c5-a51b-dccf179f0d2c.png', 'Don Vicente Palacios Valdés — Fundador e Inspiración Institucional')" 
+                             title="Haz clic para agrandar la fotografía">
+                            
+                            <div class="absolute inset-0 bg-[#8FA6BF] rounded-2xl transform -rotate-6 scale-95 opacity-80 group-hover:-rotate-12 transition-transform duration-300 shadow-md"></div>
+                            
+                            <div class="relative bg-white p-2 rounded-2xl shadow-lg border border-slate-100 transform group-hover:scale-105 group-hover:rotate-1 transition-all duration-300 overflow-hidden">
+                                <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/e713f559-cbf8-42c5-a51b-dccf179f0d2c.png" 
+                                     alt="Retrato de Vicente Palacios Valdés" 
+                                     class="w-full h-auto object-contain rounded-xl shadow-inner">
+                                
+                                <div class="absolute inset-0 bg-azul-marino/25 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl flex items-center justify-center backdrop-blur-[1px]">
+                                    <span class="bg-white/95 text-azul-marino p-2 rounded-full shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                                        <i data-lucide="zoom-in" size="18"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-slate-700 leading-relaxed text-base text-center sm:text-left">
+                            El <strong>Liceo Vicente Palacios Valdés</strong> fue fundado el 2 de junio de 1905 como Liceo de Hombres de Tomé. Con más de 120 años de trayectoria, ha sido parte fundamental de la historia comunal, formando generaciones de estudiantes y aportando al desarrollo social, cultural y profesional de Tomé.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-white p-5 rounded-xl border-l-4 border-azul-marino shadow-sm card-custom">
+                            <h4 class="font-extrabold text-sm uppercase mb-1 text-azul-marino">Misión</h4>
+                            <p class="text-sm md:text-base text-slate-600 leading-relaxed">Formación científico-humanista de calidad y altas expectativas académicas.</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl border-l-4 border-teal-600 shadow-sm card-custom">
+                            <h4 class="font-extrabold text-sm uppercase mb-1 text-teal-700">Visión</h4>
+                            <p class="text-sm md:text-base text-slate-600 leading-relaxed">Ser referente educativo y cultural formador de líderes íntegros y comprometidos.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal-right relative">
+                    <div id="history-slider" class="relative w-full h-[420px] rounded-2xl shadow-xl overflow-hidden bg-azul-marino border-4 border-white">
+                        <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/590188353_1953544821857224_8671421861905935699_n.jpg" alt="Historia LVPV 1" class="slide absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-100">
+                        <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/Captura%20de%20pantalla%202026-05-09%20204848.png" alt="Historia LVPV 2" class="slide absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-0">
+                        <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/Captura%20de%20pantalla%202026-05-09%20204648.png" alt="Historia LVPV 3" class="slide absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-0">
+                        <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/Captura%20de%20pantalla%202026-05-09%20204632.png" alt="Historia LVPV 4" class="slide absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-0">
+                        <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/592143791_1956336801578026_1785171658643216140_n.jpg" alt="Historia LVPV 5" class="slide absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-0">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Convivencia (Valores Institucionales con Grabado de Vicente Palacios ADELANTE en la ubicación indicada) -->
+    <section id="convivencia" class="relative py-20 bg-white border-y border-slate-200 overflow-hidden">
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="flex flex-col lg:flex-row gap-12 items-start">
+                
+                <!-- Columna Izquierda: Valores Institucionales + Grabado de Vicente Palacios al frente -->
+                <div class="lg:w-1/3 relative w-full">
+                    <span class="font-bold uppercase tracking-widest text-xs text-azul-lvpv bg-blue-100/70 px-3 py-1.5 rounded-md">Comunidad Escolar</span>
+                    <h2 class="reveal-left text-3xl font-black text-azul-lvpv mt-3 mb-6 uppercase tracking-tight">Valores Institucionales</h2>
+                    
+                    <!-- Lista de Valores -->
+                    <div class="grid gap-2.5 relative z-10">
+                        <div class="reveal-left value-badge text-base text-slate-800"><i data-lucide="shield-check" class="text-verde-esperanza shrink-0" size="20"></i> Responsabilidad</div>
+                        <div class="reveal-left value-badge text-base text-slate-800"><i data-lucide="shield-check" class="text-verde-esperanza shrink-0" size="20"></i> Perseverancia</div>
+                        <div class="reveal-left value-badge text-base text-slate-800"><i data-lucide="shield-check" class="text-verde-esperanza shrink-0" size="20"></i> Solidaridad</div>
+                        <div class="reveal-left value-badge text-base text-slate-800"><i data-lucide="shield-check" class="text-verde-esperanza shrink-0" size="20"></i> Respeto</div>
+                        <div class="reveal-left value-badge text-base text-slate-800"><i data-lucide="shield-check" class="text-verde-esperanza shrink-0" size="20"></i> Honestidad</div>
+                        <div class="reveal-left value-badge text-base text-slate-800"><i data-lucide="shield-check" class="text-verde-esperanza shrink-0" size="20"></i> Empatía</div>
+                        <div class="reveal-left value-badge text-base text-slate-800"><i data-lucide="shield-check" class="text-verde-esperanza shrink-0" size="20"></i> Inclusión</div>
+                    </div>
+
+                    <!-- GRABADO DE VICENTE PALACIOS AL FRENTE (Z-20) 5 PUNTOS MÁS GRANDE EN EL LUGAR SEÑALADO -->
+                    <div class="hidden lg:block absolute -right-20 xl:-right-24 -bottom-14 z-20 pointer-events-none filter drop-shadow-[0_20px_40px_rgba(0,46,93,0.3)]">
+                        <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/VICENTE%20GRABADO.png" 
+                             alt="Grabado Histórico Vicente Palacios Valdés" 
+                             class="w-64 xl:w-72 2xl:w-80 h-auto object-contain select-none">
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Tarjetas Informativas -->
+                <div class="lg:w-2/3 grid md:grid-cols-2 gap-6 relative z-10">
+                    <div class="reveal-right bg-gradient-lvpv text-white p-8 rounded-2xl shadow-lg flex flex-col justify-between card-custom">
+                        <div>
+                            <i data-lucide="clock" class="mb-5 text-verde-esperanza opacity-90" size="38"></i>
+                            <h4 class="text-xl font-bold mb-3 uppercase tracking-tight">Asistencia y Puntualidad</h4>
+                            <p class="text-base text-gray-200 leading-relaxed font-light">
+                                La presencia diaria y el respeto por los horarios son los pilares de nuestra excelencia académica. Formamos la responsabilidad que abrirá las puertas de la Educación Superior y el mundo profesional.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="reveal-right bg-slate-50/95 backdrop-blur-sm p-8 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between card-custom">
+                        <div>
+                            <i data-lucide="shield-alert" class="mb-5 text-azul-lvpv" size="38"></i>
+                            <h4 class="text-xl font-bold text-azul-lvpv mb-3 uppercase tracking-tight">Aula Segura y Convivencia</h4>
+                            <p class="text-base text-slate-600 leading-relaxed font-normal">
+                                Garantizamos un entorno de respeto y protección. Aplicamos nuestro Reglamento Interno con total transparencia y justicia, asegurando un ambiente propicio para el aprendizaje.
+                            </p>
+                        </div>
+                        <a href="https://drive.google.com/file/d/1nFRYwT7GUHCgZulgJSP48oitT-7TnbS1/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="mt-6 inline-flex items-center gap-2 text-sm font-extrabold uppercase text-azul-lvpv hover:text-verde-esperanza transition-colors">
+                            Ver Reglamento Interno <i data-lucide="arrow-up-right" size="16"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Admisión -->
+    <section id="admision" class="py-20 relative overflow-hidden text-white bg-azul-profundo">
+        <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none opacity-40">
+            <source src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/CORPORATIVO.webm" type="video/webm">
+        </video>
+        <div class="absolute inset-0 bg-azul-profundo/80 z-0 pointer-events-none"></div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-4xl mx-auto bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl overflow-hidden flex flex-col md:flex-row shadow-2xl">
+                <div class="md:w-1/2 p-8 md:p-10 bg-gradient-lvpv flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-3xl font-black mb-6 uppercase tracking-tight">Postula al LVPV</h2>
+                        <ul class="space-y-4">
+                            <li class="flex items-center gap-3 text-base text-gray-100"><i data-lucide="check-circle" class="text-verde-esperanza shrink-0" size="22"></i> Programa PIE de alta cobertura</li>
+                            <li class="flex items-center gap-3 text-base text-gray-100"><i data-lucide="check-circle" class="text-verde-esperanza shrink-0" size="22"></i> Preparación PAES intensiva</li>
+                            <li class="flex items-center gap-3 text-base text-gray-100"><i data-lucide="check-circle" class="text-verde-esperanza shrink-0" size="22"></i> Formación Científico-Humanista</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="md:w-1/2 p-8 md:p-10 bg-white text-slate-800 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-2xl font-black mb-5 uppercase text-azul-lvpv tracking-tight">Admisión Escolar</h3>
+                        <div class="space-y-3 mb-6">
+                            <div class="p-4 bg-slate-50 rounded-xl border-l-4 border-verde-esperanza font-bold text-base text-slate-700">
+                                01. Infórmate a través del SAE
+                            </div>
+                            <div class="p-4 bg-slate-50 rounded-xl border-l-4 border-azul-marino font-bold text-base text-slate-700">
+                                02. Selecciona nuestro liceo como preferencia
+                            </div>
+                        </div>
+                    </div>
+                    <a href="mailto:utp@lvpv.cl" class="btn-shine block text-center w-full bg-azul-lvpv text-white py-3.5 rounded-xl font-bold text-sm uppercase tracking-wider hover:bg-azul-profundo transition shadow-md">
+                        Solicitar Información
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Talleres Extraescolares -->
+    <section id="vida" class="py-20 bg-slate-50 border-b border-slate-200">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="reveal text-3xl md:text-4xl font-black text-azul-lvpv uppercase mb-3 tracking-tight">Talleres Extraescolares JEC</h2>
+            <p class="reveal text-base text-slate-600 max-w-xl mx-auto mb-7">Desarrollo integral y vocacional con más de 20 alternativas formativas.</p>
+            
+            <div class="reveal mb-10 flex justify-center">
+                <button onclick="document.getElementById('orientador-modal').classList.remove('hidden')" class="btn-shine btn-orientador-cta inline-flex items-center gap-3 px-6 sm:px-8 py-3.5 rounded-full font-extrabold text-sm sm:text-base uppercase tracking-wider cursor-pointer">
+                    <i data-lucide="sparkles" size="20" class="text-[#00E5FF] animate-pulse shrink-0"></i> 
+                    <span>¿No sabes cuál elegir? Consulta al Orientador IA ✨</span>
+                </button>
+            </div>
+
+            <!-- Botones de Filtro -->
+            <div class="flex flex-wrap justify-center gap-2.5 mb-10">
+                <button class="filter-btn active px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider border border-slate-300 transition" data-filter="all">Todos</button>
+                <button class="filter-btn px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider border border-slate-300 transition" data-filter="deporte">Deportes</button>
+                <button class="filter-btn px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider border border-slate-300 transition" data-filter="arte">Artes</button>
+                <button class="filter-btn px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider border border-slate-300 transition" data-filter="ciencia">Ciencias y Humanidades</button>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-6 text-left" id="talleres-grid">
+                <div class="taller-card bg-white p-7 rounded-2xl border-t-4 border-azul-marino shadow-sm card-custom" data-category="deporte">
+                    <i data-lucide="trophy" class="text-azul-lvpv mb-4" size="32"></i>
+                    <h4 class="font-extrabold uppercase text-base mb-3 text-azul-marino">Deportes</h4>
+                    <p class="text-base text-slate-600 leading-relaxed">Acondicionamiento Físico, Baile entretenido, Deportes sin barreras, Fútbol mixto, Handball, Volleyball, Yoga y Pilates.</p>
+                </div>
+                
+                <div class="taller-card bg-white p-7 rounded-2xl border-t-4 border-teal-600 shadow-sm card-custom" data-category="arte">
+                    <i data-lucide="palette" class="text-teal-600 mb-4" size="32"></i>
+                    <h4 class="font-extrabold uppercase text-base mb-3 text-teal-800">Artes</h4>
+                    <p class="text-base text-slate-600 leading-relaxed">Agrupación musical, Amigurumis, Guitarra, Cine, La Música en la Historia, Malabarismo de Circo, Muralismo, Técnicas pictóricas, Xilografía.</p>
+                </div>
+                
+                <div class="taller-card bg-white p-7 rounded-2xl border-t-4 border-sky-600 shadow-sm card-custom" data-category="ciencia">
+                    <i data-lucide="microscope" class="text-sky-600 mb-4" size="32"></i>
+                    <h4 class="font-extrabold uppercase text-base mb-3 text-sky-800">Ciencias y Humanidades</h4>
+                    <p class="text-base text-slate-600 leading-relaxed">Ajedrez, Inglés con películas, Biobío Oculto, Comité científico, Cultura Geek, Electricidad domiciliaria, Libros y películas, Periodismo Digital, Preparación PAES, Taller Ecológico.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EQUIPO DIRECTIVO -->
+    <section id="equipo" class="py-24 bg-gradient-to-b from-[#EEF4FA] via-[#E6F0F8] to-[#EEF4FA] border-b border-blue-200/60">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="font-bold uppercase tracking-widest text-xs text-azul-lvpv bg-white/80 border border-blue-200/60 px-4 py-1.5 rounded-full inline-block mb-3 shadow-sm">Liderazgo Institucional</span>
+                <h2 class="reveal text-3xl md:text-4xl font-black text-azul-lvpv uppercase tracking-tight">Nuestro Equipo Directivo</h2>
+                <div class="w-20 h-1 bg-gradient-lvpv mx-auto mt-4 mb-5 rounded-full"></div>
+                <p class="reveal text-base text-slate-700 leading-relaxed font-normal">
+                    En el Liceo Vicente Palacios Valdés, contamos con un equipo directivo comprometido con la formación integral y el bienestar de toda nuestra comunidad escolar.
+                </p>
+            </div>
+
+            <!-- Contenedor de Tarjetas del Equipo Directivo -->
+            <div class="flex flex-wrap justify-center gap-8">
+                
+                <!-- Card 1: Director -->
+                <div class="w-full sm:w-[320px] md:w-[340px] lg:w-[360px] reveal p-8 bg-white rounded-3xl border border-blue-100/80 shadow-md card-custom flex flex-col items-center text-center">
+                    <div class="relative mb-5">
+                        <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/director.png" 
+                             alt="Héctor Ruiz Romero" 
+                             class="w-28 h-28 sm:w-32 sm:h-32 rounded-full object-cover object-top border-4 border-slate-50 shadow-lg ring-4 ring-[#002E5D]/15">
+                    </div>
+                    <span class="bg-[#002E5D]/10 text-azul-lvpv text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-2">
+                        Gestión Institucional
+                    </span>
+                    <h3 class="font-black text-xl text-azul-marino leading-tight">Héctor Ruiz Romero</h3>
+                    <p class="text-xs font-bold uppercase tracking-widest text-teal-700 mb-3">Director</p>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Lidera el proyecto educativo del liceo, impulsando la excelencia académica, el desarrollo institucional y la vinculación con la comunidad.
+                    </p>
+                </div>
+
+                <!-- Card 2: Jefa de UTP -->
+                <div class="w-full sm:w-[320px] md:w-[340px] lg:w-[360px] reveal p-8 bg-white rounded-3xl border border-blue-100/80 shadow-md card-custom flex flex-col items-center text-center">
+                    <div class="relative mb-5">
+                        <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/ChatGPT%20Image%2024%20ago%202026%2C%2004_10_02%20p.m.%20(4).png" 
+                             alt="Ilse Saavedra Gutiérrez" 
+                             class="w-28 h-28 sm:w-32 sm:h-32 rounded-full object-cover object-top border-4 border-slate-50 shadow-lg ring-4 ring-[#00A8B5]/20">
+                    </div>
+                    <span class="bg-teal-50 text-teal-800 text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-2">
+                        Liderazgo Curricular
+                    </span>
+                    <h3 class="font-black text-xl text-azul-marino leading-tight">Ilse Saavedra Gutiérrez</h3>
+                    <p class="text-xs font-bold uppercase tracking-widest text-teal-700 mb-3">Jefa de UTP</p>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Coordina los procesos de aprendizaje, planificación docente y preparación para el acceso a la Educación Superior.
+                    </p>
+                </div>
+
+                <!-- Card 3: Inspectora General -->
+                <div class="w-full sm:w-[320px] md:w-[340px] lg:w-[360px] reveal p-8 bg-white rounded-3xl border border-blue-100/80 shadow-md card-custom flex flex-col items-center text-center">
+                    <div class="relative mb-5">
+                        <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/ChatGPT%20Image%2024%20ago%202026%2C%2004_10_02%20p.m.%20(1).png" 
+                             alt="Joselyn Venegas Madriaga" 
+                             class="w-28 h-28 sm:w-32 sm:h-32 rounded-full object-cover object-top border-4 border-slate-50 shadow-lg ring-4 ring-[#0B6EA8]/20">
+                    </div>
+                    <span class="bg-blue-50 text-sky-800 text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-2">
+                        Organización y Clima Escolar
+                    </span>
+                    <h3 class="font-black text-xl text-azul-marino leading-tight">Joselyn Venegas Madriaga</h3>
+                    <p class="text-xs font-bold uppercase tracking-widest text-teal-700 mb-3">Inspectora General</p>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Vela por la organización diaria, el resguardo de la seguridad y el cumplimiento del reglamento interno.
+                    </p>
+                </div>
+
+                <!-- Card 4: Inspector General (S) -->
+                <div class="w-full sm:w-[320px] md:w-[340px] lg:w-[360px] reveal p-8 bg-white rounded-3xl border border-blue-100/80 shadow-md card-custom flex flex-col items-center text-center">
+                    <div class="relative mb-5">
+                        <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/9c3612ae-0128-4557-8bcf-32b20bb6bbc9.png" 
+                             alt="Carlos Reyes Méndez" 
+                             class="w-28 h-28 sm:w-32 sm:h-32 rounded-full object-cover object-top border-4 border-slate-50 shadow-lg ring-4 ring-[#002E5D]/15">
+                    </div>
+                    <span class="bg-indigo-50 text-indigo-800 text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-2">
+                        Apoyo Operativo
+                    </span>
+                    <h3 class="font-black text-xl text-azul-marino leading-tight">Carlos Reyes Méndez</h3>
+                    <p class="text-xs font-bold uppercase tracking-widest text-teal-700 mb-3">Inspector General (S)</p>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Acompaña la gestión formativa, la asistencia y la resguardada convivencia de los estudiantes.
+                    </p>
+                </div>
+
+                <!-- Card 5: Encargada de Convivencia Educativa -->
+                <div class="w-full sm:w-[320px] md:w-[340px] lg:w-[360px] reveal p-8 bg-white rounded-3xl border border-blue-100/80 shadow-md card-custom flex flex-col items-center text-center">
+                    <div class="relative mb-5">
+                        <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/ChatGPT%20Image%2024%20ago%202026%2C%2004_10_02%20p.m.%20(5).png" 
+                             alt="Iris Torres Fernández" 
+                             class="w-28 h-28 sm:w-32 sm:h-32 rounded-full object-cover object-top border-4 border-slate-50 shadow-lg ring-4 ring-emerald-500/20">
+                    </div>
+                    <span class="bg-emerald-50 text-emerald-800 text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-2">
+                        Bienestar Socioemocional
+                    </span>
+                    <h3 class="font-black text-xl text-azul-marino leading-tight">Iris Torres Fernández</h3>
+                    <p class="text-xs font-bold uppercase tracking-widest text-teal-700 mb-3">Encargada de Convivencia Educativa</p>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Dirige las acciones de acompañamiento psicosocial, prevención e inclusión dentro de la comunidad.
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Módulo de Atención y Comunicación con Apoderados -->
+            <div class="reveal mt-16 max-w-3xl mx-auto bg-gradient-lvpv text-white p-8 sm:p-9 rounded-3xl shadow-xl flex items-center justify-center border border-white/10 text-center">
+                <div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-5">
+                    <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center shrink-0 border border-[#00E5FF]/40 text-2xl">
+                        💡
+                    </div>
+                    <div class="text-center sm:text-left">
+                        <h4 class="text-xl md:text-2xl font-black uppercase tracking-tight mb-1.5">
+                            ¿Necesitas coordinar una entrevista o consulta presencial?
+                        </h4>
+                        <p class="text-base text-gray-200 font-light leading-relaxed flex items-center justify-center sm:justify-start gap-2">
+                            <i data-lucide="clock" size="18" class="text-[#00E5FF] shrink-0"></i>
+                            <span><strong>Horarios de atención:</strong> Lunes a Viernes de 08:30 a 13:00 hrs.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- SECCIÓN: EQUIPO DOCENTE Y FUNCIONARIOS (FOTOS CORREGIDAS) -->
+    <!-- ======================================================= -->
+    <section id="docentes" class="py-24 bg-white border-b border-slate-200">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="font-bold uppercase tracking-widest text-xs text-azul-lvpv bg-blue-100/70 px-4 py-1.5 rounded-full inline-block mb-3">Comunidad Educativa</span>
+                <h2 class="reveal text-3xl md:text-4xl font-black text-azul-lvpv uppercase tracking-tight">Equipo Docente y Funcionarios</h2>
+                <div class="w-20 h-1 bg-gradient-lvpv mx-auto mt-4 mb-5 rounded-full"></div>
+                <p class="reveal text-base md:text-lg text-slate-700 leading-relaxed font-normal">
+                  Nuestro equipo docente y de funcionarios aporta desde distintas áreas para construir una comunidad educativa cercana, inclusiva y orientada al futuro.
+                </p>
+            </div>
+
+            <!-- Bloques Principales con Fotografías Públicas y Lightbox Corregido -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-12">
+                
+                <!-- Tarjeta 1: Cuerpo Docente -->
+                <div class="reveal bg-slate-50 rounded-3xl border border-slate-200/80 shadow-md overflow-hidden card-custom flex flex-col justify-between">
+                    <div class="relative h-64 sm:h-72 overflow-hidden bg-azul-marino cursor-pointer group"
+                         onclick="openImageModal('https://www.liceovicentepalaciostome.cl/wp-content/uploads/2026/08/profes.png', 'Cuerpo Docente — Liceo Vicente Palacios Valdés')"
+                         title="Haz clic para agrandar la foto">
+                        <img src="https://www.liceovicentepalaciostome.cl/wp-content/uploads/2026/08/profes.png" 
+                             alt="Cuerpo Docente LVPV" 
+                             class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-azul-profundo/80 via-transparent to-transparent flex items-end p-6">
+                            <span class="bg-[#00E5FF] text-azul-profundo px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider shadow flex items-center gap-1.5">
+                                <i data-lucide="zoom-in" size="14"></i> Profesores Especialistas
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-8 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-black text-azul-marino mb-3 uppercase tracking-tight flex items-center gap-2">
+                                <i data-lucide="book-open" class="text-verde-esperanza" size="24"></i> Cuerpo Docente
+                            </h3>
+                            <p class="text-base text-slate-700 leading-relaxed">
+                                Profesores especialistas en sus áreas, con experiencia y formación continua, comprometidos con una enseñanza de calidad y con altas expectativas para sus estudiantes. El liceo cuenta con un alto porcentaje de docentes en los tramos <strong>Avanzado, Experto I y Experto II</strong> de la Carrera Profesional Docente.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 2: Asistentes de la Educación y Funcionarios -->
+                <div class="reveal bg-slate-50 rounded-3xl border border-slate-200/80 shadow-md overflow-hidden card-custom flex flex-col justify-between">
+                    <div class="relative h-64 sm:h-72 overflow-hidden bg-azul-marino cursor-pointer group"
+                         onclick="openImageModal('https://www.liceovicentepalaciostome.cl/wp-content/uploads/2026/08/asistentes.png', 'Asistentes de la Educación y Funcionarios — Liceo Vicente Palacios Valdés')"
+                         title="Haz clic para agrandar la foto">
+                        <img src="https://www.liceovicentepalaciostome.cl/wp-content/uploads/2026/08/asistentes.png" 
+                             alt="Asistentes de la Educación y Funcionarios LVPV" 
+                             class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-azul-profundo/80 via-transparent to-transparent flex items-end p-6">
+                            <span class="bg-verde-esperanza text-white px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider shadow flex items-center gap-1.5">
+                                <i data-lucide="zoom-in" size="14"></i> Soporte y Gestión Diaria
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-8 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-black text-azul-marino mb-3 uppercase tracking-tight flex items-center gap-2">
+                                <i data-lucide="users" class="text-azul-luz" size="24"></i> Asistentes de la Educación y Funcionarios
+                            </h3>
+                            <p class="text-base text-slate-700 leading-relaxed">
+                                Cumplen un rol fundamental en el funcionamiento cotidiano del liceo, colaborando en la atención, organización, apoyo y cuidado de los distintos espacios y procesos de nuestra comunidad educativa.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 3 Equipos Especializados de Apoyo -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Equipo de Convivencia Educativa -->
+                <div class="reveal p-8 bg-slate-50 rounded-3xl border-t-4 border-emerald-500 shadow-sm card-custom flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-5">
+                            <i data-lucide="heart-handshake" size="24"></i>
+                        </div>
+                        <h4 class="text-xl font-black text-azul-marino mb-3 uppercase">Equipo de Convivencia Educativa</h4>
+                        <p class="text-sm md:text-base text-slate-600 leading-relaxed">
+                            Promueve relaciones basadas en el respeto, la tolerancia y el buen trato. Sus profesionales acompañan a los estudiantes y desarrollan acciones destinadas a fortalecer una convivencia escolar sana y segura.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Programa de Integración Escolar (PIE) -->
+                <div class="reveal p-8 bg-slate-50 rounded-3xl border-t-4 border-cyan-500 shadow-sm card-custom flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-cyan-100 text-cyan-800 flex items-center justify-center mb-5">
+                            <i data-lucide="sparkles" size="24"></i>
+                        </div>
+                        <h4 class="text-xl font-black text-azul-marino mb-3 uppercase">Programa de Integración Escolar (PIE)</h4>
+                        <p class="text-sm md:text-base text-slate-600 leading-relaxed">
+                            Entrega apoyo especializado a estudiantes que presentan necesidades educativas, favoreciendo su participación, aprendizaje e inclusión dentro de la comunidad escolar.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Equipo de Orientación -->
+                <div class="reveal p-8 bg-slate-50 rounded-3xl border-t-4 border-azul-marino shadow-sm card-custom flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-blue-100 text-azul-marino flex items-center justify-center mb-5">
+                            <i data-lucide="compass" size="24"></i>
+                        </div>
+                        <h4 class="text-xl font-black text-azul-marino mb-3 uppercase">Equipo de Orientación</h4>
+                        <p class="text-sm md:text-base text-slate-600 leading-relaxed">
+                            Acompaña a los estudiantes en su desarrollo personal, académico y vocacional, apoyándolos en la toma de decisiones y en la construcción de sus proyectos de vida y continuidad de estudios.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contacto" class="bg-azul-profundo text-white pt-16 pb-10 border-t border-white/10">
+        <div class="container mx-auto px-6 grid md:grid-cols-4 gap-10">
+            <div class="col-span-1 md:col-span-2">
+                <div class="flex items-center space-x-3.5 mb-5">
+                    <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/Dise%C3%B1o%20sin%20t%C3%ADtulo.png" alt="Logo LVPV" class="w-12 h-12 object-contain">
+                    <div>
+                        <h3 class="text-xl font-extrabold leading-none uppercase">Liceo Vicente</h3>
+                        <h3 class="text-xl font-extrabold leading-none text-gray-400 uppercase">Palacios Valdés</h3>
+                    </div>
+                </div>
+                <p class="text-gray-300 max-w-sm leading-relaxed italic text-base mb-6">
+                    "Construyendo el futuro a partir de nuestra historia". 121 años formando personas en la comuna de Tomé.
+                </p>
+
+                <!-- Redes Sociales Footer con Iconos PNG -->
+                <div>
+                    <h5 class="text-xs uppercase font-bold text-gray-400 tracking-wider mb-3">Síguenos en Redes Sociales</h5>
+                    <div class="flex items-center space-x-3">
+                        <a href="https://www.instagram.com/lvptome" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/25 flex items-center justify-center transition-all transform hover:-translate-y-1 shadow-md" title="Instagram @lvptome" aria-label="Instagram">
+                            <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/icons8-instagram-24.png" alt="Instagram" class="w-5 h-5 object-contain">
+                        </a>
+                        <a href="https://www.facebook.com/lvpvtome" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/25 flex items-center justify-center transition-all transform hover:-translate-y-1 shadow-md" title="Facebook @lvpvtome" aria-label="Facebook">
+                            <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/icons8-facebook-24.png" alt="Facebook" class="w-5 h-5 object-contain">
+                        </a>
+                        <a href="https://www.youtube.com/@VicentePalaciosVald%C3%A9s" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/25 flex items-center justify-center transition-all transform hover:-translate-y-1 shadow-md" title="YouTube Oficial" aria-label="YouTube">
+                            <img src="https://raw.githubusercontent.com/femontes/WEB-LVPV/refs/heads/main/icons8-youtube-24.png" alt="YouTube" class="w-5 h-5 object-contain">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <h4 class="font-bold uppercase tracking-wider text-xs text-verde-esperanza mb-5">Contacto</h4>
+                <ul class="space-y-3.5 text-base text-gray-300">
+                    <li class="flex items-start gap-3">
+                        <i data-lucide="map-pin" class="text-verde-esperanza shrink-0 mt-0.5" size="20"></i> 
+                        <span>Mariano Egaña 1525, Tomé, Región del Biobío</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i data-lucide="phone" class="text-verde-esperanza shrink-0" size="20"></i> 
+                        <span>+56 9 5159 3655</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="font-bold uppercase tracking-wider text-xs text-verde-esperanza mb-5">Institucional</h4>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li>RBD: 4829-1</li>
+                    <li>Sostenedor: DEM Tomé</li>
+                    <li class="pt-4 text-xs text-gray-500">© 2026 Liceo LVPV.</li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lightbox Modal para Agrandar Imágenes -->
+    <div id="image-modal" class="hidden fixed inset-0 z-[250] flex items-center justify-center bg-black/85 backdrop-blur-md p-4 transition-opacity duration-300 opacity-0 pointer-events-none">
+        <div class="relative max-w-4xl max-h-[90vh] flex flex-col items-center animate-[chatPop_0.3s_ease-out]">
+            <button id="close-image-modal" class="absolute -top-12 right-0 md:-right-8 text-white/80 hover:text-white p-2 rounded-full hover:bg-white/10 transition cursor-pointer" aria-label="Cerrar imagen">
+                <i data-lucide="x" size="28"></i>
+            </button>
+            <div class="bg-white/10 p-2 sm:p-3 rounded-3xl border border-white/20 shadow-2xl overflow-hidden max-h-[80vh] flex justify-center">
+                <img id="modal-image-src" src="" alt="Imagen ampliada" class="max-h-[72vh] w-auto h-auto object-contain rounded-2xl shadow-2xl">
+            </div>
+            <p id="modal-image-caption" class="text-white text-center text-sm md:text-base font-semibold mt-3 tracking-wide drop-shadow"></p>
+        </div>
+    </div>
+
+    <!-- Chat Asistente Flotante -->
+    <div class="fixed bottom-6 right-6 z-[100] flex flex-col items-end">
+        <div id="chat-window" class="chat-window w-[340px] sm:w-[360px] h-[500px] bg-white rounded-3xl mb-3 shadow-[0_20px_50px_rgba(0,29,58,0.35)] border border-slate-200 overflow-hidden">
+            <div class="bg-gradient-lvpv p-4 text-white flex justify-between items-center">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center border border-[#00E5FF]/40">
+                        <i data-lucide="bot" class="text-[#00E5FF]" size="20"></i>
+                    </div>
+                    <div>
+                        <span class="font-extrabold text-sm uppercase tracking-wide block leading-tight">Asistente LVPV</span>
+                        <span class="text-[10px] text-emerald-300 flex items-center gap-1 font-semibold">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> En línea
+                        </span>
+                    </div>
+                </div>
+                <button id="close-chat" class="text-gray-300 hover:text-white transition p-1 cursor-pointer"><i data-lucide="x" size="20"></i></button>
+            </div>
+            
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3.5 text-sm bg-slate-50">
+            </div>
+            
+            <div class="p-3.5 bg-white border-t flex gap-2 items-center">
+                <input type="text" id="chat-input" placeholder="Pregunta sobre talleres, admisión, etc..." class="flex-1 bg-slate-100 px-4 py-2.5 rounded-xl text-sm outline-none text-slate-800 focus:ring-2 focus:ring-[#00E5FF]/60 transition" autocomplete="off">
+                <button id="send-chat" class="btn-shine bg-azul-lvpv text-white p-2.5 rounded-xl hover:bg-azul-profundo transition shadow cursor-pointer"><i data-lucide="send" size="18"></i></button>
+            </div>
+        </div>
+
+        <!-- Botón Circular Flotante -->
+        <button id="toggle-chat" class="btn-chat-bubble text-white w-14 h-14 rounded-full flex items-center justify-center relative cursor-pointer border-2 border-white ring-2 ring-white/60" aria-label="Abrir Asistente LVPV">
+            <i data-lucide="message-circle" size="26" class="text-white"></i>
+        </button>
+    </div>
+
+    <!-- Modal Orientador IA -->
+    <div id="orientador-modal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl relative animate-[chatPop_0.3s_ease-out]">
+            <div class="bg-gradient-lvpv p-6 text-white text-center relative">
+                <h3 class="text-xl font-bold uppercase flex items-center justify-center gap-2">
+                    <i data-lucide="compass" class="text-verde-esperanza"></i> Orientador Vocacional IA ✨
+                </h3>
+                <p class="text-sm opacity-90 mt-1">Cuéntanos tus intereses y te sugeriremos talleres a tu medida.</p>
+                <button onclick="document.getElementById('orientador-modal').classList.add('hidden')" class="absolute top-4 right-4 text-white/80 hover:text-white transition cursor-pointer"><i data-lucide="x" size="20"></i></button>
+            </div>
+            <div class="p-6 text-slate-800">
+                <textarea id="orientador-input" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-base outline-none focus:border-verde-esperanza focus:ring-2 focus:ring-verde-esperanza/30 transition resize-none" placeholder="Ej: Me apasiona la música, crear proyectos tecnológicos y hacer deportes..."></textarea>
+                <button id="btn-orientador" class="btn-shine w-full mt-3.5 bg-verde-esperanza text-white font-bold uppercase tracking-wider py-3 rounded-xl hover:bg-teal-700 transition shadow text-sm cursor-pointer">
+                    Analizar mi perfil ✨
+                </button>
+                <div id="orientador-result" class="mt-4 hidden">
+                    <h4 class="font-bold text-azul-marino mb-2 text-sm uppercase flex items-center gap-1.5">
+                        <i data-lucide="lightbulb" class="text-verde-esperanza" size="18"></i> Recomendación para ti:
+                    </h4>
+                    <div id="orientador-text" class="text-sm text-slate-700 bg-slate-50 p-4 rounded-xl border-l-4 border-verde-esperanza leading-relaxed"></div>
+                </div>
+                <div id="orientador-loading" class="mt-4 hidden flex justify-center py-2">
+                    <div class="typing-indicator"><span></span><span></span><span></span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts de Interfaz -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+
+            // Barra de progreso y estilo de header en scroll
+            const progress = document.getElementById('scroll-progress');
+            const header = document.querySelector('.site-header');
+            window.addEventListener('scroll', () => {
+                const total = document.documentElement.scrollHeight - window.innerHeight;
+                progress.style.width = (window.scrollY / total * 100) + '%';
+                header.classList.toggle('scrolled', window.scrollY > 40);
+            });
+
+            // Animaciones Reveal
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => obs.observe(el));
+
+            // Palabras Dinámicas
+            const palabras = ["CIUDADANOS", "LÍDERES", "PERSONAS", "SUEÑOS"];
+            let pIdx = 0;
+            const pEl = document.getElementById('palabra-cambiante');
+            
+            setInterval(() => {
+                pIdx = (pIdx + 1) % palabras.length;
+                pEl.style.opacity = '0';
+                pEl.style.transform = 'translateY(12px) scale(0.96)';
+                
+                setTimeout(() => { 
+                    pEl.textContent = palabras[pIdx]; 
+                    pEl.style.opacity = '1'; 
+                    pEl.style.transform = 'translateY(0) scale(1)';
+                }, 350);
+            }, 3000);
+
+            // Filtro de Talleres
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const cards = document.querySelectorAll('.taller-card');
+            filterBtns.forEach(btn => {
+                btn.onclick = () => {
+                    const filter = btn.dataset.filter;
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    cards.forEach(card => {
+                        const show = filter === 'all' || card.dataset.category === filter;
+                        card.classList.toggle('hidden-card', !show);
+                    });
+                };
+            });
+
+            // Menú móvil y Chat
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileNav = document.getElementById('mobile-nav');
+            mobileMenuBtn.onclick = () => mobileNav.classList.toggle('hidden');
+            mobileNav.querySelectorAll('a').forEach(a => a.onclick = () => mobileNav.classList.add('hidden'));
+
+            document.getElementById('toggle-chat').onclick = () => {
+                document.getElementById('chat-window').classList.toggle('active');
+                setTimeout(() => document.getElementById('chat-input').focus(), 150);
+            };
+            document.getElementById('close-chat').onclick = () => document.getElementById('chat-window').classList.remove('active');
+            
+            // Slider Histórico
+            const slides = document.querySelectorAll('#history-slider .slide');
+            let currentSlide = 0;
+            if (slides.length > 0) {
+                setInterval(() => {
+                    slides[currentSlide].classList.remove('opacity-100');
+                    slides[currentSlide].classList.add('opacity-0');
+                    currentSlide = (currentSlide + 1) % slides.length;
+                    slides[currentSlide].classList.remove('opacity-0');
+                    slides[currentSlide].classList.add('opacity-100');
+                }, 4000);
+            }
+        });
+
+        // ==========================================
+        // FUNCIONES LIGHTBOX / MODAL DE IMAGEN
+        // ==========================================
+        function openImageModal(src, caption) {
+            const modal = document.getElementById('image-modal');
+            const modalImg = document.getElementById('modal-image-src');
+            const modalCaption = document.getElementById('modal-image-caption');
+            modalImg.src = src;
+            modalCaption.textContent = caption || '';
+            modal.classList.remove('hidden', 'pointer-events-none', 'opacity-0');
+            modal.classList.add('opacity-100', 'pointer-events-auto');
+        }
+
+        function closeImageModal() {
+            const modal = document.getElementById('image-modal');
+            modal.classList.remove('opacity-100', 'pointer-events-auto');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            setTimeout(() => modal.classList.add('hidden'), 250);
+        }
+
+        document.getElementById('close-image-modal').onclick = closeImageModal;
+        document.getElementById('image-modal').onclick = (e) => {
+            if (e.target.id === 'image-modal') closeImageModal();
+        };
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeImageModal();
+        });
+    </script>
+
+    <!-- MOTOR INTEGRAL ASISTENTE LVPV (API + BASE DE DATOS LOCAL INFALIBLE) -->
+    <script>
+        const API_KEY = "AIzaSyAZc7RhcoTn8k3Wk7sbFCBQoyFJHu0qcuY";
+        
+        const baseConocimientoLVPV = {
+            identidad: "El Liceo Vicente Palacios Valdés fue fundado el 2 de junio de 1905 (121 años de historia) como Liceo de Hombres de Tomé. Es un establecimiento público y científico-humanista orientado a preparar a los estudiantes para la Educación Superior.",
+            horarioApoderados: "El horario de atención presencial para apoderados es de **Lunes a Viernes de 08:30 a 13:00 hrs**.",
+            equipoDirectivo: "• **Director:** Héctor Ruiz Romero (Gestión Institucional)<br>• **Jefa de UTP:** Ilse Saavedra Gutiérrez (Liderazgo Curricular)<br>• **Inspectora General:** Joselyn Venegas Madriaga (Organización y Clima Escolar)<br>• **Inspector General (S):** Carlos Reyes Méndez (Apoyo Operativo)<br>• **Encargada de Convivencia Educativa:** Iris Torres Fernández (Bienestar Socioemocional).",
+            comunidadDocente: "• **Cuerpo Docente:** Profesores especialistas con alto porcentaje en tramos Avanzado, Experto I y Experto II.<br>• **Convivencia Educativa:** Acciones de buen trato, prevención y clima escolar.<br>• **Programa PIE:** Apoyo especializado e inclusión escolar.<br>• **Orientación:** Desarrollo vocacional y proyectos de vida.<br>• **Asistentes de la Educación:** Apoyo diario indispensable.",
+            contacto: "Dirección: **Mariano Egaña 1525, Tomé, Región del Biobío**. Teléfono: **+56 9 5159 3655**. Correo: **utp@lvpv.cl**. RBD: **4829-1** (Sostenedor DEM Tomé).",
+            admision: "La postulación e ingreso se realiza mediante el **Sistema de Admisión Escolar (SAE)** del MINEDUC. El liceo cuenta con **Programa de Integración Escolar (PIE)** con profesionales multidisciplinarios y preparación intensiva para la **PAES**.",
+            talleres: {
+                horario: "Los talleres JEC funcionan de **lunes a jueves de 14:25 a 15:45 hrs**.",
+                deportes: "Fútbol mixto, Volleyball, Handball, Yoga y Pilates, Acondicionamiento Físico, Baile entretenido y Deportes sin barreras.",
+                artes: "Muralismo, Xilografía, Amigurumis, Guitarra (Principiante e Intermedio), Agrupación musical, Cine, La Música en la Historia y Malabarismo de Circo.",
+                ciencias: "Preparación PAES (Biología y Química), Ajedrez, Inglés con películas y canciones, Robótica/Electricidad domiciliaria, Comité Científico, Periodismo Digital, Biobío Oculto y Taller Ecológico."
+            },
+            convivencia: {
+                valores: "Responsabilidad, Perseverancia, Solidaridad, Respeto, Honestidad, Empatía e Inclusión.",
+                celulares: "El uso de dispositivos móviles está **regulado y restringido durante las clases**, enfocándose en el respeto pedagógico y consecuencias formativas.",
+                uniforme: "En Educación Física es obligatorio el **buzo institucional completo** y útiles de aseo personal (toalla, jabón, polera de cambio).",
+                faltas: "• **Faltas Leves:** No traer delantal, usar gorro en sala, gritar.<br>• **Faltas Graves:** Lenguaje soez, copiar en evaluaciones, uso reiterado de celular sin autorización.<br>• **Faltas Gravísimas:** Bullying/ciberacoso, agresión física, porte de elementos prohibidos o sustancias ilícitas."
+            }
+        };
+
+        const systemPrompt = `Eres el "Asistente LVPV", la IA oficial del Liceo Vicente Palacios Valdés de Tomé (Chile).
+Tono: Amable, formal pero cercano (chileno educativo formal: apoderado, clases, PAES).
+Horario Apoderados: Lunes a Viernes de 08:30 a 13:00 hrs.
+Información Oficial:
+- Equipo Directivo: Director Héctor Ruiz Romero, Jefa UTP Ilse Saavedra, Inspectora General Joselyn Venegas, Inspector General (S) Carlos Reyes, Encargada Convivencia Iris Torres.
+- Equipo Docente y Asistentes: Profesores especialistas (tramos Avanzado, Experto I y II), Equipo PIE, Convivencia Escolar, Orientación y Asistentes de la Educación.
+- Fundación: 2 de junio de 1905 (121 años), Científico-Humanista.
+- Ubicación: Mariano Egaña 1525, Tomé. Tel: +56 9 5159 3655. Mail: utp@lvpv.cl. RBD 4829-1.
+- Admisión: SAE MINEDUC, con programa PIE y preparación PAES.
+- Talleres JEC (Lunes a Jueves 14:25 a 15:45 hrs): Deportes, Artes y Ciencias.
+- Convivencia: Celulares restringidos en aula, buzo obligatorio en Ed. Física.`;
+
+        function responderDesdeBaseLocal(texto) {
+            const t = texto.toLowerCase();
+
+            if (t.includes("docente") || t.includes("profesor") || t.includes("asistente") || t.includes("funcionario") || t.includes("pie") || t.includes("orientacion")) {
+                return `👩‍🏫 **Equipo Docente y Funcionarios:**<br><br>${baseConocimientoLVPV.comunidadDocente}<br><br>💡 Nuestro equipo está altamente comprometido con la excelencia académica y la formación integral de los estudiantes.`;
+            }
+            if (t.includes("directiv") || t.includes("director") || t.includes("utp") || t.includes("inspector") || t.includes("equipo") || t.includes("iris") || t.includes("hector") || t.includes("ilse") || t.includes("joselyn") || t.includes("carlos")) {
+                return `👥 **Equipo Directivo LVPV:**<br><br>${baseConocimientoLVPV.equipoDirectivo}<br><br>💡 Para entrevistas presenciales con el equipo directivo, el horario de atención es de Lunes a Viernes de 08:30 a 13:00 hrs.`;
+            }
+            if (t.includes("horario") || t.includes("atencion") || t.includes("apoderado") || t.includes("hora")) {
+                return `🕒 **Horario de Atención a Apoderados:**<br>${baseConocimientoLVPV.horarioApoderados}<br><br>📍 Lugar: Mariano Egaña 1525, Tomé.`;
+            }
+            if (t.includes("taller") || t.includes("extraescolar") || t.includes("deporte") || t.includes("arte") || t.includes("musica") || t.includes("futbol")) {
+                return `🎨 **Talleres Extraescolares JEC:**<br>${baseConocimientoLVPV.talleres.horario}<br><br>⚽ **Deportes:** ${baseConocimientoLVPV.talleres.deportes}<br><br>🎭 **Artes:** ${baseConocimientoLVPV.talleres.artes}<br><br>🔬 **Ciencias y Humanidades:** ${baseConocimientoLVPV.talleres.ciencias}`;
+            }
+            if (t.includes("admision") || t.includes("postula") || t.includes("sae") || t.includes("matricula") || t.includes("cupo") || t.includes("paes")) {
+                return `📝 **Admisión y Matrícula:**<br>${baseConocimientoLVPV.admision}<br><br>Para consultas directas escribe a **utp@lvpv.cl** o acércate a Mariano Egaña 1525.`;
+            }
+            if (t.includes("celular") || t.includes("telefono") || t.includes("reglamento") || t.includes("convivencia") || t.includes("falta") || t.includes("uniforme") || t.includes("buzo")) {
+                return `🛡️ **Convivencia Escolar y Normas:**<br>• **Uso de Celulares:** ${baseConocimientoLVPV.convivencia.celulares}<br>• **Uniforme Ed. Física:** ${baseConocimientoLVPV.convivencia.uniforme}<br><br>📋 **Tipificación de Faltas:**<br>${baseConocimientoLVPV.convivencia.faltas}`;
+            }
+            if (t.includes("historia") || t.includes("fundacion") || t.includes("año") || t.includes("quien fue") || t.includes("vicente palacios")) {
+                return `🏛️ **Historia Institucional:**<br>${baseConocimientoLVPV.identidad}`;
+            }
+            if (t.includes("contacto") || t.includes("telefono") || t.includes("direccion") || t.includes("donde queda") || t.includes("rbd") || t.includes("correo")) {
+                return `📞 **Información de Contacto:**<br>${baseConocimientoLVPV.contacto}`;
+            }
+
+            return `¡Hola! 👋 Como **Asistente LVPV**, puedo orientarte con datos oficiales sobre:<br><br>• 👥 **Equipo Directivo, Docentes y Asistentes**<br>• 📚 **Admisión SAE y Matrículas**<br>• 🎨 **Talleres Extraescolares JEC**<br>• 🕒 **Horarios de atención a apoderados** (08:30 a 13:00 hrs)<br>• 🛡️ **Reglamento y Convivencia Escolar**<br>• 🏛️ **Historia de nuestros 121 años**<br><br>¿Qué tema deseas consultar? 😊`;
+        }
+
+        let chatHistory = [
+            { role: "user", parts: [{ text: "Hola" }] },
+            { role: "model", parts: [{ text: "¡Hola! 👋 Soy el Asistente LVPV. Tengo información actualizada sobre equipo directivo, docentes, talleres JEC, admisión escolar, normas de convivencia e historia institucional. ¿En qué te puedo orientar hoy? 😊" }] }
+        ];
+
+        const cInput = document.getElementById("chat-input");
+        const cMsgs = document.getElementById("chat-messages");
+        const sendBtn = document.getElementById("send-chat");
+
+        cMsgs.innerHTML = `<div class="bg-white p-3.5 rounded-2xl rounded-tl-none border border-slate-200 shadow-sm max-w-[88%] text-slate-800 leading-relaxed text-sm">¡Hola! 👋 Soy el <strong>Asistente LVPV</strong>. Tengo información actualizada sobre equipo directivo, docentes, talleres JEC, admisión escolar, normas de convivencia e historia institucional. ¿En qué te puedo orientar hoy? 😊</div>`;
+
+        window.sendMessage = async function() {
+            const userText = cInput.value.trim();
+            if(!userText) return;
+
+            cInput.disabled = true;
+            sendBtn.disabled = true;
+
+            const uMsg = document.createElement('div');
+            uMsg.className = "bg-azul-lvpv text-white p-3.5 rounded-2xl rounded-tr-none ml-auto max-w-[85%] text-sm leading-relaxed shadow-sm";
+            uMsg.innerText = userText;
+            cMsgs.appendChild(uMsg);
+            cInput.value = "";
+            cMsgs.scrollTop = cMsgs.scrollHeight;
+
+            const typing = document.createElement('div');
+            typing.className = "bg-white p-3 rounded-2xl rounded-tl-none border border-slate-200 shadow-sm max-w-[85%] typing-indicator";
+            typing.innerHTML = "<span></span><span></span><span></span>";
+            cMsgs.appendChild(typing);
+            cMsgs.scrollTop = cMsgs.scrollHeight;
+
+            let respuestaFinal = "";
+
+            try {
+                const endpoints = [
+                    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${API_KEY}`,
+                    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`
+                ];
+
+                let res = null;
+                for (const url of endpoints) {
+                    try {
+                        const r = await fetch(url, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                contents: [...chatHistory, { role: "user", parts: [{ text: userText }] }],
+                                systemInstruction: { parts: [{ text: systemPrompt }] }
+                            })
+                        });
+                        if (r.ok) { res = r; break; }
+                    } catch(e) {}
+                }
+
+                if (res && res.ok) {
+                    const data = await res.json();
+                    const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (aiText) {
+                        respuestaFinal = aiText;
+                        chatHistory.push({ role: "user", parts: [{ text: userText }] });
+                        chatHistory.push({ role: "model", parts: [{ text: aiText }] });
+                    }
+                }
+            } catch(e) {}
+
+            if (!respuestaFinal) {
+                respuestaFinal = responderDesdeBaseLocal(userText);
+            }
+
+            typing.remove();
+
+            const bMsg = document.createElement('div');
+            bMsg.className = "bg-white p-3.5 rounded-2xl rounded-tl-none border border-slate-200 shadow-sm max-w-[88%] text-slate-800 leading-relaxed text-sm";
+            bMsg.innerHTML = respuestaFinal
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\n/g, '<br>');
+            cMsgs.appendChild(bMsg);
+
+            try {
+                const popSound = new Audio('https://actions.google.com/sounds/v1/cartoon/pop.ogg');
+                popSound.volume = 0.25;
+                popSound.play().catch(() => {});
+            } catch(e){}
+
+            cInput.removeAttribute('disabled');
+            sendBtn.removeAttribute('disabled');
+            cInput.focus();
+            cMsgs.scrollTop = cMsgs.scrollHeight;
+        };
+
+        sendBtn.onclick = window.sendMessage;
+        cInput.addEventListener('keydown', (e) => { 
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                window.sendMessage(); 
+            }
+        });
+
+        // Orientador Vocacional IA
+        const btnOrientador = document.getElementById('btn-orientador');
+        if (btnOrientador) {
+            btnOrientador.onclick = async () => {
+                const val = document.getElementById('orientador-input').value.trim();
+                if (!val) return;
+
+                btnOrientador.disabled = true;
+                btnOrientador.innerHTML = 'Analizando perfil...';
+                document.getElementById('orientador-loading').classList.remove('hidden');
+                document.getElementById('orientador-result').classList.add('hidden');
+
+                let orientText = "";
+
+                try {
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+                    const res = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ role: "user", parts: [{ text: val }] }],
+                            systemInstruction: { parts: [{ text: "Eres el Orientador Vocacional IA del Liceo Vicente Palacios Valdés. Recomienda 2 o 3 talleres JEC según los gustos del alumno (Deportes, Artes o Ciencias/Humanidades) y da una breve justificación motivadora con emojis." }] }
+                        })
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        orientText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                    }
+                } catch(e) {}
+
+                if (!orientText) {
+                    orientText = `¡Excelente perfil! ✨ Te recomendamos explorar estos talleres en el LVPV:<br><br>• 🎨 **Artes:** Muralismo o Agrupación Musical para canalizar tu creatividad.<br>• ⚽ **Deportes:** Fútbol mixto o Acondicionamiento Físico.<br>• 🔬 **Ciencias:** Robótica/Electricidad domiciliaria o Taller Ecológico.<br><br>Recuerda que funcionan de lunes a jueves de 14:25 a 15:45 hrs.`;
+                }
+
+                document.getElementById('orientador-text').innerHTML = orientText
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\n/g, '<br>');
+                document.getElementById('orientador-result').classList.remove('hidden');
+                document.getElementById('orientador-loading').classList.add('hidden');
+                btnOrientador.removeAttribute('disabled');
+                btnOrientador.innerHTML = 'Analizar de nuevo ✨';
+            };
+        }
+    </script>
+</body>
+</html>
